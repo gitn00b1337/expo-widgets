@@ -1,0 +1,9 @@
+{
+  "platforms": ["ios", "android", "web"],
+  "ios": {
+    "modules": ["ExpoWidgetsModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.widgets.ExpoWidgetsModule"]
+  }
+}
