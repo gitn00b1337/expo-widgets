@@ -1,5 +1,5 @@
 {
-  "name": "expo-widgets",
+  "name": "@bittingz/expo-widgets",
   "version": "0.1.0",
   "description": "An expo module that allows you to make native widgets in iOS and android",
   "main": "build/index.js",
@@ -25,13 +25,13 @@
     "expo-widgets",
     "ExpoWidgets"
   ],
-  "repository": "https://todo",
+  "repository": "https://github.com/gitn00b1337/expo-widgets",
   "bugs": {
-    "url": "https://todo/issues"
+    "url": "https://github.com/gitn00b1337/expo-widgets/issues"
   },
   "author": "Mike Stewart",
   "license": "MIT",
-  "homepage": "https://todo#readme",
+  "homepage": "https://github.com/gitn00b1337/expo-widgets",
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@types/fs-extra": "^11.0.1",
