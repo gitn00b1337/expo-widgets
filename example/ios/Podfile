@@ -38,7 +38,29 @@ elsif podfile_properties.key?('ios.flipper') then
   end
 end
 
-target 'expowidgetsexample' do
+target 'expowidgetsWidgetExtension' do
+  use_expo_modules!
+  config = use_native_modules!
+
+  use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
+  use_frameworks! :linkage => ENV['USE_FRAMEWORKS'].to_sym if ENV['USE_FRAMEWORKS']
+
+  # Flags change depending on the env values.
+  flags = get_default_flags()
+
+  use_react_native!(
+    :path => config[:reactNativePath],
+    :hermes_enabled => podfile_properties['expo.jsEngine'] == nil || podfile_properties['expo.jsEngine'] == 'hermes',
+    :fabric_enabled => flags[:fabric_enabled],
+    # An absolute path to your application root.
+    :app_path => "#{Pod::Config.instance.installation_root}/..",
+    # Note that if you have use_frameworks! enabled, Flipper will not work if enabled
+    :flipper_configuration => flipper_config
+  )
+
+end
+
+target 'expowidgets' do
   use_expo_modules!
   config = use_native_modules!
 
@@ -59,6 +81,13 @@ target 'expowidgetsexample' do
   )
 
   post_install do |installer|
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+        config.build_settings['APPLICATION_EXTENSION_API_ONLY'] = 'No'        
+      end
+    end
+
     react_native_post_install(
       installer,
       config[:reactNativePath],
@@ -75,6 +104,9 @@ target 'expowidgetsexample' do
       target_installation_result.resource_bundle_targets.each do |resource_bundle_target|
         resource_bundle_target.build_configurations.each do |config|
           config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+          config.build_settings['APPLICATION_EXTENSION_API_ONLY'] = 'No'
+          # config.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = '$(inherited)'
+          # config.build_settings['CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER'] = '$(inherited)'
         end
       end
     end

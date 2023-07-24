@@ -13,7 +13,11 @@
     "prepublishOnly": "expo-module prepublishOnly",
     "expo-module": "expo-module",
     "open:ios": "open -a \"Xcode\" example/ios",
-    "open:android": "open -a \"Android Studio\" example/android"
+    "open:android": "open -a \"Android Studio\" example/android",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "plugin:build": "expo-module build plugin",
+    "plugin:test": "expo-module test plugin"
   },
   "keywords": [
     "react-native",
@@ -25,17 +29,31 @@
   "bugs": {
     "url": "https://todo/issues"
   },
-  "author": "Mike Stewart <> ()",
+  "author": "Mike Stewart",
   "license": "MIT",
   "homepage": "https://todo#readme",
-  "dependencies": {},
   "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@types/fs-extra": "^11.0.1",
+    "@types/node": "^20.4.2",
     "@types/react": "^18.0.25",
+    "@types/react-native": "^0.72.2",
     "expo-module-scripts": "^3.0.11",
-    "expo-modules-core": "^1.5.7"
+    "expo-modules-core": "^1.5.7",
+    "fs-extra": "^11.1.1",
+    "path": "^0.12.7"
   },
   "peerDependencies": {
     "expo": "*",
+    "react": "*",
+    "react-native": "*"
+  },
+  "dependencies": {
+    "@expo/config-plugins": "~7.2.2",
+    "expo": "*",
+    "expo-modules": "^0.0.0",
+    "expo-splash-screen": "~0.20.4",
+    "expo-status-bar": "~1.6.0",
     "react": "*",
     "react-native": "*"
   }

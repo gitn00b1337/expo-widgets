@@ -5,7 +5,7 @@ import * as ExpoWidgets from 'expo-widgets';
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>{ExpoWidgets.hello()}</Text>
+      <Text>Example App!</Text>
     </View>
   );
 }

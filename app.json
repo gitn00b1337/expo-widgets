@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "expo-widgets",
+    "slug": "expo-widgets",
+    "version": "0.1.0",
+    "description": "An expo module that allows you to make native widgets in iOS and android",
+    "sdkVersion": "49.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "198071ab-2ac3-4c30-b45a-d6f3ba4d7983"
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "com.undeaddev.expowidgets"
+    }
+  }
+}

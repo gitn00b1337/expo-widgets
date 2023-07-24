@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "expo-widgets-example",
-    "slug": "expo-widgets-example",
+    "name": "expo-widgets",
+    "slug": "expo-widgets",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -25,8 +25,33 @@
       },
       "package": "expo.modules.widgets.example"
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
+    "plugins": [
+      [
+        "../app.plugin.js",
+        {
+          "ios": {
+            "src": "./widgets/ios"
+          }
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "build": {
+          "experimental": {
+            "ios": {
+              "appExtensions": [
+                {
+                  "targetName": "expowidgetsWidgetExtension",
+                  "bundleIdentifier": "expo.modules.widgets.example.expowidgetsWidgetExtension",
+                  "entitlements": {}
+                }
+              ]
+            }
+          }
+        },
+        "projectId": "198071ab-2ac3-4c30-b45a-d6f3ba4d7983"
+      }
     }
   }
 }
