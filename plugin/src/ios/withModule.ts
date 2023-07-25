@@ -4,6 +4,7 @@ import fsExtra from "fs-extra"
 import path from "path"
 import { WithExpoIOSWidgetsProps } from ".."
 import { getTemplate } from "./module-template"
+import { Logging } from "../utils/logger"
 
 export const withModule: ConfigPlugin<WithExpoIOSWidgetsProps> = (
     config,
@@ -16,9 +17,10 @@ export const withModule: ConfigPlugin<WithExpoIOSWidgetsProps> = (
             } = props.modRequest
 
             const widgetFolderPath = path.join(projectRoot, options.src)
-            console.log(`Current directory::: ${__dirname}`)
+            
+            Logging.logger.debug(`Current directory::: ${__dirname}`)
             const expoModulePath = path.join(__dirname, '../../../ios/ExpoWidgetsModule.swift')
-            console.log(`Expo module path: ${expoModulePath}`)
+            Logging.logger.debug(`Expo module path: ${expoModulePath}`)
 
             const moduleFile = path.join(widgetFolderPath, 'Module.swift')
 
@@ -27,7 +29,7 @@ export const withModule: ConfigPlugin<WithExpoIOSWidgetsProps> = (
                 // need for comms between app and the widget
                 // to avoid writes from previous runs, extract contents from the template and overwrite any previous changes
                 const templatePath = path.join(__dirname, 'module.template.swift')
-                console.log(`No Module.swift provided. Using template ${templatePath}`)
+                Logging.logger.debug(`No Module.swift provided. Using template ${templatePath}`)
 
                 const contents = getTemplate()
                 fsExtra.outputFileSync(expoModulePath, contents)

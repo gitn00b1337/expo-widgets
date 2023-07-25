@@ -1,6 +1,7 @@
-import { ConfigPlugin } from "expo/config-plugins";
-import { WithExpoIOSWidgetsProps } from "..";
-import { getBundleIdentifier, getTargetName } from "./withWidgetXCode";
+import { ConfigPlugin } from "expo/config-plugins"
+import { WithExpoIOSWidgetsProps } from ".."
+import { getBundleIdentifier, getTargetName } from "./withWidgetXCode"
+import { Logging } from "../utils/logger"
 
 export const withConfig: ConfigPlugin<WithExpoIOSWidgetsProps> = (config, options) => {
   const targetName = getTargetName(config, options)
@@ -15,8 +16,8 @@ export const withConfig: ConfigPlugin<WithExpoIOSWidgetsProps> = (config, option
     }
   );
 
-  console.log(`withConfig:: adding target ${targetName} to appExtensions`)
-  console.log(`withConfig:: adding bundle identifier ${bundleIdentifier} to appExtensions`)
+  Logging.logger.debug(`withConfig:: adding target ${targetName} to appExtensions`)
+  Logging.logger.debug(`withConfig:: adding bundle identifier ${bundleIdentifier} to appExtensions`)
   
   if (!configIndex) {
     config.extra = {

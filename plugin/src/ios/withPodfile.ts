@@ -1,7 +1,8 @@
-import { mergeContents } from "@expo/config-plugins/build/utils/generateCode";
-import { ConfigPlugin, withDangerousMod } from "expo/config-plugins";
-import * as fs from "fs";
-import * as path from "path";
+import { mergeContents } from "@expo/config-plugins/build/utils/generateCode"
+import { ConfigPlugin, withDangerousMod } from "expo/config-plugins"
+import * as fs from "fs"
+import * as path from "path"
+import { Logging } from "../utils/logger"
 
 export const withPodfile: ConfigPlugin<{ targetName: string, projectName: string }> = (
   config,
@@ -71,7 +72,7 @@ end
         comment: "#",
       })
         
-      console.log('Updating podfile')      
+      Logging.logger.debug('Updating podfile')      
     
       fs.writeFileSync(podFilePath, withPodInstall.contents);
 

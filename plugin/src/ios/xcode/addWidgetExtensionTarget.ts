@@ -4,6 +4,7 @@ import { getBundleIdentifier, getDefaultBuildConfigurationSettings, getTargetNam
 import { WithExpoIOSWidgetsProps } from "../..";
 import { ExpoConfig } from "@expo/config-types"
 import * as util from "util"
+import { Logging } from "../../utils/logger"
 
 export const addWidgetExtensionTarget = (project: XcodeProject, config: ExpoConfig, options: WithExpoIOSWidgetsProps, name: string, bundleId?: string) => {
     const targetType = 'app_extension'
@@ -81,7 +82,7 @@ export const addWidgetExtensionTarget = (project: XcodeProject, config: ExpoConf
         productType = productTypeForTargetType(targetType),
         productFileType = fileTypeForProductType(productType);
         
-    console.log(`Adding product file`)
+    Logging.logger.debug(`Adding product file`)
 
     const productFile = project.addProductFile(productName, { 
         basename: `${targetName}.appex`,
@@ -121,10 +122,10 @@ export const addWidgetExtensionTarget = (project: XcodeProject, config: ExpoConf
 
     // This has 'Copy Files' hardcoded. instead adjust to groupName
     //project.addToPbxCopyfilesBuildPhase(productFile)
-    console.log(`Adding PBXCopyFilesBuildPhase`)
+    Logging.logger.debug(`Adding PBXCopyFilesBuildPhase`)
     project.addBuildPhase([], 'PBXCopyFilesBuildPhase', groupName, project.getFirstTarget().uuid,  targetType, '')
 
-    console.log(`Fixing PBXCopyFilesBuildPhase`)
+    Logging.logger.debug(`Fixing PBXCopyFilesBuildPhase`)
     project.buildPhaseObject('PBXCopyFilesBuildPhase', groupName, targetUuid)
         .files
         .push({
@@ -133,9 +134,8 @@ export const addWidgetExtensionTarget = (project: XcodeProject, config: ExpoConf
         })
 
     // Target: Add uuid to root project
-    console.log(`Adding target to project section`)
+    Logging.logger.debug(`Adding target to project section`)
     project.addToPbxProjectSection(target);
-
 
     // Return target on success
     return target;

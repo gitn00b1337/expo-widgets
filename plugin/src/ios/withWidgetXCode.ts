@@ -4,8 +4,8 @@ import fsExtra from "fs-extra"
 import path from "path"
 import { ExpoConfig } from "@expo/config-types"
 import { WithExpoIOSWidgetsProps } from ".."
-import * as util from "util"
 import { addWidgetExtensionTarget } from "./xcode/addWidgetExtensionTarget"
+import { Logging } from "../utils/logger"
 
 export const getDefaultBuildConfigurationSettings = ({
   targetName,
@@ -117,10 +117,9 @@ class WidgetProjectFileCollection {
     if (file === "Module.swift") {
       return;
     }
-    else 
-    if (this._files.hasOwnProperty(extension)) {
-      console.log(`Adding file ${file}...`)
-      console.log(`Extension: ${extension}`)
+    else if (this._files.hasOwnProperty(extension)) {
+      Logging.logger.debug(`Adding file ${file}...`)
+      Logging.logger.debug(`Extension: ${extension}`)
 
       this._files[extension].push(file)
     }
@@ -149,7 +148,7 @@ const copyFilesToWidgetProject = (widgetFolderPath: string, targetPath: string) 
   }
 
   if (!fsExtra.existsSync(targetPath)) {
-    console.log(`Creating widget extension directory ${targetPath}`)
+    Logging.logger.debug(`Creating widget extension directory ${targetPath}`)
     fsExtra.mkdirSync(targetPath, { recursive: true });
   }
 
@@ -159,7 +158,7 @@ const copyFilesToWidgetProject = (widgetFolderPath: string, targetPath: string) 
       if (name.endsWith('Module.swift') || fileName.startsWith('.')) {        
         return false
       }
-      console.log(`Copying ${name}`)
+      Logging.logger.debug(`Copying ${name}`)
 
       return true
     }
@@ -222,9 +221,9 @@ const addFilesToWidgetProject = (
     const folderName = relativePath.split(/[\\\/]/).at(-1)
     const fileCollection = WidgetProjectFileCollection.fromFiles([])
 
-    console.log(`Reading directory:: ${directory}`)
-    console.log(`Relative path is:: ${relativePath}`)
-    console.log(`Folder name:: ${folderName}`)
+    Logging.logger.debug(`Reading directory:: ${directory}`)
+    Logging.logger.debug(`Relative path is:: ${relativePath}`)
+    Logging.logger.debug(`Folder name:: ${folderName}`)
     const items = fs.readdirSync(directory)
 
     let directoriesToIterate: string[] = []
@@ -234,7 +233,7 @@ const addFilesToWidgetProject = (
       const itemRelPath = path.join(relativePath, item)
       
       if (item === 'Assets.xcassets') {
-        continue
+        fileCollection.addFile(item)
       }
       else if (fsExtra.lstatSync(fullPath).isDirectory()) {
         directoriesToIterate.push(itemRelPath)
@@ -248,14 +247,14 @@ const addFilesToWidgetProject = (
     const filesByType = fileCollection.getFiltered()
     const allFiles = fileCollection.getBundled();
     
-    console.log(`Item count: ${items.length}`)
-    console.log(`Adding ${filesByType.swift.length} swift files...`)
-    console.log(`Adding ${filesByType.xcassets.length} asset files...`)
+    Logging.logger.debug(`Item count: ${items.length}`)
+    Logging.logger.debug(`Adding ${filesByType.swift.length} swift files...`)
+    Logging.logger.debug(`Adding ${filesByType.xcassets.length} asset files...`)
 
-    console.log(`Creating PBX group for the widget project:: ${targetName}`)
+    Logging.logger.debug(`Creating PBX group for the widget project:: ${targetName}`)
     // for each level of files in the directory add a new group, and then add this group to the parent directory
   
-    console.log(`Adding ${allFiles.length} files...`)
+    Logging.logger.debug(`Adding ${allFiles.length} files...`)
 
     const groupTarget = isBaseDirectory ? targetName : folderName
     const groupPath = isBaseDirectory ? targetName : relativePath
@@ -270,9 +269,9 @@ const addFilesToWidgetProject = (
     if (isBaseDirectory) {
       // add to top project (main) group
       const projectInfo = project.getFirstProject()
-      //console.log(projectInfo)
+      //Logging.logger.debug(projectInfo)
       const mainGroup = projectInfo.firstProject.mainGroup
-      console.log(`Adding new group to main group: ${mainGroup}`)
+      Logging.logger.debug(`Adding new group to main group: ${mainGroup}`)
 
       project.addToPbxGroup(pbxGroup.uuid, mainGroup)
 
@@ -280,7 +279,7 @@ const addFilesToWidgetProject = (
       if (filesByType.entitlements?.length) {
         // CE8935AB2A5E98B900A4B0E2 /* TestWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestWidgetExtension.entitlements; sourceTree = "<group>"; };
         for (const file of filesByType.entitlements) {
-          console.log(`Adding entitlement file ${file}`)
+          Logging.logger.debug(`Adding entitlement file ${file}`)
     
           const newFile = project.addFile(file, mainGroup, {
             lastKnownFileType: 'text.plist.entitlements',
@@ -289,10 +288,10 @@ const addFilesToWidgetProject = (
         }    
       }
       else {
-        console.log(`No entitlements files`)
+        Logging.logger.debug(`No entitlements files`)
       }
 
-      console.log(`Adding build phase for PBXSourcesBuildPhase ${groupTarget} to widget target ${widgetTargetUuid}`)
+      Logging.logger.debug(`Adding build phase for PBXSourcesBuildPhase ${groupTarget} to widget target ${widgetTargetUuid}`)
 
       project.addBuildPhase(
         filesByType.swift,
@@ -303,7 +302,7 @@ const addFilesToWidgetProject = (
         "", // build path 
       )
 
-      console.log(`Adding PBXCopyFilesBuildPhase to project ${projectInfo.firstProject.uuid}`)
+      Logging.logger.debug(`Adding PBXCopyFilesBuildPhase to project ${projectInfo.firstProject.uuid}`)
       project.addBuildPhase(
         [],
         'PBXCopyFilesBuildPhase',
@@ -321,7 +320,7 @@ const addFilesToWidgetProject = (
       //   })
 
       if (filesByType.xcassets?.length) {
-        console.log(`Adding PBXResourcesBuildPhase to target ${widgetTargetUuid}`)
+        Logging.logger.debug(`Adding PBXResourcesBuildPhase to target ${widgetTargetUuid}`)
         project.addBuildPhase(
           filesByType.xcassets,
           "PBXResourcesBuildPhase",
@@ -340,11 +339,11 @@ const addFilesToWidgetProject = (
       project.addToPbxGroup(pbxGroup.uuid, parentGroup.uuid)
     }
 
-    //console.log(project.hash.project.objects['PBXGroup'])
+    //Logging.logger.debug(project.hash.project.objects['PBXGroup'])
   
     if (filesByType.xcassets) {
       for (const assetFile of filesByType.xcassets) {
-        console.log(`Adding asset file:: ${assetFile} to target ${targetUuid}`)
+        Logging.logger.debug(`Adding asset file:: ${assetFile} to target ${targetUuid}`)
   
         project.addResourceFile(assetFile, {
           target: targetUuid,
@@ -377,26 +376,26 @@ const addFilesToWidgetProject = (
     }
   }
 
-  console.log(projectTarget)
+  Logging.logger.debug(projectTarget)
 
   if (!projectTarget) {
-    console.log(`No project target! Adding...`)
+    Logging.logger.debug(`No project target! Adding...`)
     projectTarget = project.addTarget(projectName, 'application', '')
-    console.log(projectTarget)
+    Logging.logger.debug(projectTarget)
   }
 
   //const widgetsTarget = project.addTarget(targetName, 'application', '')
   //const extensionTarget = project.addTarget(`${targetName}Extension`, 'app_extension', '')
-  console.log(`Adding extension target`)
+  Logging.logger.debug(`Adding extension target`)
   const extensionTarget = addWidgetExtensionTarget(project, expoConfig, options, `${targetName}`)
 
-  console.log(`Adding project target ${projectTarget?.uuid} to extension target ${extensionTarget.uuid}`)
+  Logging.logger.debug(`Adding project target ${projectTarget?.uuid} to extension target ${extensionTarget.uuid}`)
 
   const projectObjects = project.hash.project.objects
   const dodgyKeys = [ "PBXTargetDependency", "PBXContainerItemProxy" ]
   
   for (const key of dodgyKeys) {
-    console.log(`Fixing key ${key}`)
+    Logging.logger.debug(`Fixing key ${key}`)
     if (!projectObjects[key]) {
       projectObjects[key] = {};
     }
@@ -423,7 +422,7 @@ const addFilesToWidgetProject = (
     .filter(id => id.indexOf('comment') === -1)
     [0];
 
-  console.log('proj section uuid::' + projectUuid)
+  Logging.logger.debug('proj section uuid::' + projectUuid)
 
   iterateFiles('', true, undefined, extensionTarget.uuid)
 
@@ -434,14 +433,21 @@ const addFilesToWidgetProject = (
 
 
 const addFrameworksToWidgetProject = (project: XcodeProject, target: { uuid: string }) => {
-  project.addFramework('WidgetKit.framework', {
-    target: target.uuid,
-    link: true,
-  })
-  project.addFramework('SwiftUI.framework', {
-    target: target.uuid,
-    link: true,
-  })
+  const frameworks = [ 'WidgetKit.framework',  'SwiftUI.framework' ]
+
+  for (const framework of frameworks) {
+    project.addFramework(framework, {
+      target: target.uuid,
+      link: true,
+    })
+  }
+
+  project.addBuildPhase(
+    frameworks,
+    'PBXFrameworksBuildPhase',
+    'Frameworks',
+    target.uuid
+  )
 }
 
 export const getXCodeBuildConfiguration = (project: XcodeProject, config: ExpoConfig, options: WithExpoIOSWidgetsProps, targetName: string) => {
