@@ -21,7 +21,7 @@ export const withLiveActivities: ConfigPlugin<WithExpoIOSWidgetsProps> = (config
 const defaultOptions = (): WithExpoIOSWidgetsProps => {
     return {
         src: 'widgets/ios',
-        deploymentTarget: '16.4',
+        deploymentTarget: '16.2',
         useLiveActivities: false,
         frequentUpdates: false,
         devTeamId: '',

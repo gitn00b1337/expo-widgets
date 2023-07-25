@@ -26,6 +26,9 @@ DerivedData
 *.xcuserstate
 project.xcworkspace
 
+# NPM
+package
+
 # Android/IJ
 #
 .classpath
