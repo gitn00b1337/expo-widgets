@@ -10,7 +10,7 @@ import { addWidgetExtensionTarget } from "./xcode/addWidgetExtensionTarget"
 export const getDefaultBuildConfigurationSettings = ({
   targetName,
   currentProjectVersion = '1',
-  deploymentTarget = '16.4',
+  deploymentTarget = '16.2',
   bundleIdentifier,
   developmentTeamId,
   marketingVersion,
