@@ -1,13 +1,14 @@
 {
   "name": "@bittingz/expo-widgets",
-  "version": "0.2.3",
+  "version": "0.2.1",
   "description": "An expo module that allows you to make native widgets in iOS and android",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "private": false,
   "scripts": {
     "build": "expo-module build",
-    "build:plugin": "npm run build plugin",
+    "build:plugin": "npm run copy:ios-module-template && npm run build plugin",
+    "copy:ios-module-template": "mkdir -p ./plugin/build/ios && cp ./plugin/src/ios/module.template.swift ./plugin/build/ios",
     "clean": "expo-module clean",
     "lint": "expo-module lint",
     "test": "expo-module test",
@@ -19,7 +20,8 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "plugin:build": "expo-module build plugin",
-    "plugin:test": "expo-module test plugin"
+    "plugin:test": "expo-module test plugin",
+    "postinstall": "npm run build:plugin"
   },
   "keywords": [
     "react-native",

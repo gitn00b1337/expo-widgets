@@ -21,7 +21,7 @@
     "typescript": "^4.9.4",
     "xcode": "^3.0.1"
   },
-  "private": true,
+  "private": false,
   "expo": {
     "autolinking": {
       "nativeModulesDir": ".."
