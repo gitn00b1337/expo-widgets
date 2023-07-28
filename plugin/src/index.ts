@@ -33,9 +33,15 @@ export type WithExpoIOSWidgetsProps = {
      * XCode project overwrites. Use with caution!
      */
     xcode?: {
-        targetName: string
-        widgetBundleIdentifier: string
+        targetName?: string
+        widgetBundleIdentifier?: string
+        generateAppGroup?: boolean
+        appGroupId?: string
     }
+    /**
+     * A collection of relative file paths to files your module file needs (like shared models)
+     */
+    moduleDependencies: string[]
 }
 
 export type WithExpoWidgetsProps = {

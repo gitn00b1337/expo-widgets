@@ -1,5 +1,5 @@
 import { WithExpoIOSWidgetsProps } from ".."
-import { ConfigPlugin } from "@expo/config-plugins"
+import { ConfigPlugin, withInfoPlist } from "@expo/config-plugins"
 import { getTargetName, withWidgetXCode } from "./withWidgetXCode"
 import { withConfig } from "./withWidgetEAS"
 import { withPodfile } from "./withPodfile"
@@ -25,7 +25,10 @@ const defaultOptions = (): WithExpoIOSWidgetsProps => {
         useLiveActivities: false,
         frequentUpdates: false,
         devTeamId: '',
-        
+        moduleDependencies: [],
+        xcode: {
+            generateAppGroup: true,
+        }
     }
 }
 
@@ -43,5 +46,6 @@ export const withIOSWidgets: ConfigPlugin<WithExpoIOSWidgetsProps> = (config, op
         projectName: config.name
     })
     config = withConfig(config, defaultedOptions)
+
     return config;
 }
