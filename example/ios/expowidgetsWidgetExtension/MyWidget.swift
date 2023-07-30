@@ -2,29 +2,28 @@ import WidgetKit
 import SwiftUI
 
 func getEntry() -> SimpleEntry {
-    let logger = Logger()
 
     if let data = UserDefaults.standard.data(forKey: "MyData") {
         do {
             let decoder = JSONDecoder()
             let data = try decoder.decode(MyData.self, from: data)
 
-            let entry = MyData(
+            let entry = SimpleEntry(
+                date: Date(),
                 message: data.message
             )
-
-            logger.info("MyData decoded")
             
             return entry
         } catch (let error) {
-            logger.error("An error occured decoding MyData: \(error.localizedDescription)")
+            //logger.error("An error occured decoding MyData: \(error.localizedDescription)")
         }
     }
     else {
-        logger.warn("No entry found MyData")
+        //logger.warn("No entry found MyData")
     }
 
-    return MyData(
+    return SimpleEntry(
+        date: Date(),
         message: "Placeholder. If this message appears in iOS, do you have a dev account set up correctly with signing permissions?"
     )
 }
@@ -53,6 +52,7 @@ struct Provider: TimelineProvider {
 
 struct SimpleEntry: TimelineEntry {
     let date: Date
+    let message: String
 }
 
 struct MyWidgetEntryView : View {
@@ -77,9 +77,9 @@ struct MyWidget: Widget {
 
 struct MyWidget_Previews: PreviewProvider {
     static var previews: some View {
-        let entry = getUpdatedEntry()
+        let entry = getEntry()
 
-        MyWidgetEntryView(entry)
+        MyWidgetEntryView(entry: entry)
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }
