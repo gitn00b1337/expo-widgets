@@ -1,8 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native';
-
-import * as ExpoWidgets from 'expo-widgets';
+import { ExpoWidgetsModule } from "@bittingz/expo-widgets"
 
 export default function App() {
+  ExpoWidgetsModule.setUKBreakdown({ message: 'Hello world!' })
+
   return (
     <View style={styles.container}>
       <Text>Example App!</Text>

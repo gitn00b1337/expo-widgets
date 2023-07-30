@@ -46,10 +46,6 @@ export const addWidgetExtensionTarget = (project: XcodeProject, config: ExpoConf
             isa: 'XCBuildConfiguration',
             buildSettings: {
                 GCC_PREPROCESSOR_DEFINITIONS: ['"DEBUG=1"', '"$(inherited)"'],
-                // INFOPLIST_FILE: '"' + path.join(targetSubfolder, targetSubfolder + '-Info.plist' + '"'),
-                // LD_RUNPATH_SEARCH_PATHS: '"$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks"',
-                // PRODUCT_NAME: '"' + targetName + '"',
-                // SKIP_INSTALL: 'YES',
                 ...settings
             }
         },
@@ -57,10 +53,6 @@ export const addWidgetExtensionTarget = (project: XcodeProject, config: ExpoConf
             name: 'Release',
             isa: 'XCBuildConfiguration',
             buildSettings: {
-                //INFOPLIST_FILE: '"' + path.join(targetSubfolder, targetSubfolder + '-Info.plist' + '"'),
-                //LD_RUNPATH_SEARCH_PATHS: '"$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks"',
-                //PRODUCT_NAME: '"' + targetName + '"',
-                //SKIP_INSTALL: 'YES',
                 ...settings
             }
         }
@@ -119,6 +111,9 @@ export const addWidgetExtensionTarget = (project: XcodeProject, config: ExpoConf
     // Target: Add to PBXNativeTarget section
     project.addToPbxNativeTargetSection(target)
 
+
+    project.addTargetAttribute('DevelopmentTeam', options.devTeamId, target)
+    project.addTargetAttribute('DevelopmentTeam', options.devTeamId)
 
     // This has 'Copy Files' hardcoded. instead adjust to groupName
     //project.addToPbxCopyfilesBuildPhase(productFile)

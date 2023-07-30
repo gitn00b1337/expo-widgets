@@ -3,14 +3,18 @@ import { ConfigPlugin, withDangerousMod } from "expo/config-plugins"
 import * as fs from "fs"
 import * as path from "path"
 import { Logging } from "../utils/logger"
+import { getTargetName } from "./withWidgetXCode"
+import { WithExpoIOSWidgetsProps } from ".."
+import { withAppGroupEntitlements } from "./xcode/withAppGroupEntitlements"
 
-export const withPodfile: ConfigPlugin<{ targetName: string, projectName: string }> = (
-  config,
-  { targetName, projectName }
-) => {
+export const withPodfile: ConfigPlugin<WithExpoIOSWidgetsProps> = (config, options) => {
+  const targetName = `${getTargetName(config, options)}`
+
   return withDangerousMod(config, [
     "ios",
     (config) => {
+      withAppGroupEntitlements(config, options)
+
       const podFilePath = path.join( config.modRequest.platformProjectRoot, "Podfile" );
       let podFileContent = fs.readFileSync(podFilePath).toString();
 

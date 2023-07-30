@@ -6,7 +6,6 @@ import { ExpoConfig } from "@expo/config-types"
 import { WithExpoIOSWidgetsProps } from ".."
 import { addWidgetExtensionTarget } from "./xcode/addWidgetExtensionTarget"
 import { Logging } from "../utils/logger"
-import { withAppGroupEntitlements } from "./xcode/withAppGroupEntitlements"
 
 export const getDefaultBuildConfigurationSettings = ({
   targetName,
@@ -36,7 +35,7 @@ export const getDefaultBuildConfigurationSettings = ({
     //CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER: "YES",
     CLANG_WARN_UNGUARDED_AVAILABILITY: "YES_AGGRESSIVE",
     CODE_SIGN_STYLE: "Automatic",
-    CODE_SIGN_ENTITLEMENTS: `${targetName}.entitlements`,
+    CODE_SIGN_ENTITLEMENTS: `${targetName}/${targetName}.entitlements`,
     CURRENT_PROJECT_VERSION: `${currentProjectVersion}`,
     DEBUG_INFORMATION_FORMAT: "dwarf",
     DEVELOPMENT_TEAM: `${developmentTeamId}`,
@@ -57,7 +56,7 @@ export const getDefaultBuildConfigurationSettings = ({
     SWIFT_ACTIVE_COMPILATION_CONDITIONS: "DEBUG",
     SWIFT_EMIT_LOC_STRINGS: "YES",
     SWIFT_OPTIMIZATION_LEVEL: "-Onone",
-    SWIFT_VERSION: "5.0",
+    SWIFT_VERSION: "5.4",
     TARGETED_DEVICE_FAMILY: '"1,2"',
   }
 }
@@ -171,7 +170,6 @@ const copyModuleDependencies = (options: WithExpoIOSWidgetsProps, widgetFolderPa
   const iosFolder =  path.join(__dirname, '../../../ios')
 
   if (!options.moduleDependencies) {
-    Logging.logger.debug(`No module dependencies provided.`)
     return
   }
 
@@ -202,12 +200,12 @@ export const withWidgetXCode: ConfigPlugin<WithExpoIOSWidgetsProps> = (
       const targetName = getTargetName(config, options)
       const targetPath = path.join(platformProjectRoot, targetName)
 
-      withAppGroupEntitlements(project, config, options, props)
+      // copy widget files over
       copyFilesToWidgetProject(widgetFolderPath, targetPath)
       copyModuleDependencies(options, widgetFolderPath)
 
       const { extensionTarget, } = addFilesToWidgetProject(project, { widgetFolderPath, targetUuid, targetName, projectName: projectName || 'MyProject', expoConfig: config, options });
-  
+
       return props
     } catch (e) {
       console.error(e)
@@ -295,20 +293,20 @@ const addFilesToWidgetProject = (
       project.addToPbxGroup(pbxGroup.uuid, mainGroup)
 
       // entitlement files should only be at the top level
-      // if (filesByType.entitlements?.length) {
-      //   // CE8935AB2A5E98B900A4B0E2 /* TestWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestWidgetExtension.entitlements; sourceTree = "<group>"; };
-      //   for (const file of filesByType.entitlements) {
-      //     Logging.logger.debug(`Adding entitlement file ${file}`)
+      if (filesByType.entitlements?.length) {
+        // CE8935AB2A5E98B900A4B0E2 /* TestWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestWidgetExtension.entitlements; sourceTree = "<group>"; };
+        for (const file of filesByType.entitlements) {
+          Logging.logger.debug(`Adding entitlement file ${file}`)
     
-      //     const newFile = project.addFile(file, mainGroup, {
-      //       lastKnownFileType: 'text.plist.entitlements',
-      //       sourceTree: '"<group>"',
-      //     })
-      //   }    
-      // }
-      // else {
-      //   Logging.logger.debug(`No entitlements files`)
-      // }
+          // const newFile = project.addFile(file, mainGroup, {
+          //   lastKnownFileType: 'text.plist.entitlements',
+          //   sourceTree: '"<group>"',
+          // })
+        }    
+      }
+      else {
+        Logging.logger.debug(`No entitlements files`)
+      }
 
       Logging.logger.debug(`Adding build phase for PBXSourcesBuildPhase ${groupTarget} to widget target ${widgetTargetUuid}`)
 
@@ -469,30 +467,30 @@ const addFrameworksToWidgetProject = (project: XcodeProject, target: { uuid: str
   )
 }
 
-export const getXCodeBuildConfiguration = (project: XcodeProject, config: ExpoConfig, options: WithExpoIOSWidgetsProps, targetName: string) => {
-  const settings = getDefaultBuildConfigurationSettings({
-    targetName: getTargetName(config, options),
-    deploymentTarget: options.deploymentTarget,
-    developmentTeamId: options.devTeamId,
-    bundleIdentifier: getBundleIdentifier(config, options),
-    currentProjectVersion: config.ios?.buildNumber || '1',
-    marketingVersion: config.version || '1.0',
-  });
+// export const getXCodeBuildConfiguration = (project: XcodeProject, config: ExpoConfig, options: WithExpoIOSWidgetsProps, targetName: string) => {
+//   const settings = getDefaultBuildConfigurationSettings({
+//     targetName: getTargetName(config, options),
+//     deploymentTarget: options.deploymentTarget,
+//     developmentTeamId: options.devTeamId,
+//     bundleIdentifier: getBundleIdentifier(config, options),
+//     currentProjectVersion: config.ios?.buildNumber || '1',
+//     marketingVersion: config.version || '1.0',
+//   });
 
-  return [
-    {
-      name: "Debug",
-      isa: "XCBuildConfiguration",
-      buildSettings: {
-        ...settings,
-      } 
-    },
-    {
-      name: "Release",
-      isa: "XCBuildConfiguration",
-      buildSettings: {
-        ...settings,
-      }
-    }
-  ]
-}
+//   return [
+//     {
+//       name: "Debug",
+//       isa: "XCBuildConfiguration",
+//       buildSettings: {
+//         ...settings,
+//       } 
+//     },
+//     {
+//       name: "Release",
+//       isa: "XCBuildConfiguration",
+//       buildSettings: {
+//         ...settings,
+//       }
+//     }
+//   ]
+// }

@@ -2,9 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>aps-environment</key>
+    <string>development</string>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>expo.modules.widgets.example.wgroup</string>
+		<string>group.expo.modules.widgets.example.expowidgets</string>
 	</array>
 </dict>
 </plist>

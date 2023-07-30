@@ -1,28 +1,52 @@
 import WidgetKit
 import SwiftUI
 
+func getEntry() -> SimpleEntry {
+    let logger = Logger()
+
+    if let data = UserDefaults.standard.data(forKey: "MyData") {
+        do {
+            let decoder = JSONDecoder()
+            let data = try decoder.decode(MyData.self, from: data)
+
+            let entry = MyData(
+                message: data.message
+            )
+
+            logger.info("MyData decoded")
+            
+            return entry
+        } catch (let error) {
+            logger.error("An error occured decoding MyData: \(error.localizedDescription)")
+        }
+    }
+    else {
+        logger.warn("No entry found MyData")
+    }
+
+    return MyData(
+        message: "Placeholder. If this message appears in iOS, do you have a dev account set up correctly with signing permissions?"
+    )
+}
+
 struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date())
+        getEntry()
     }
     
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(date: Date())
+        let entry = getEntry()
         completion(entry)
     }
     
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        var entries: [SimpleEntry] = []
-        
-        // Generate a timeline consisting of five entries an hour apart, starting from the current date.
-        let currentDate = Date()
-        for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            let entry = SimpleEntry(date: entryDate)
-            entries.append(entry)
-        }
-        
-        let timeline = Timeline(entries: entries, policy: .atEnd)
+        let date = Date()
+        let entry = getEntry()
+        let nextUpdateDate = Calendar.current.date(byAdding: .minute, value: 15, to: date)!
+        let timeline = Timeline(
+            entries: [ entry ],
+            policy: .after(nextUpdateDate)
+        )
         completion(timeline)
     }
 }
@@ -35,7 +59,7 @@ struct MyWidgetEntryView : View {
     var entry: Provider.Entry
     
     var body: some View {
-        Text(entry.date, style: .time)
+        Text(entry.message)
     }
 }
 
@@ -53,7 +77,9 @@ struct MyWidget: Widget {
 
 struct MyWidget_Previews: PreviewProvider {
     static var previews: some View {
-        MyWidgetEntryView(entry: SimpleEntry(date: Date()))
+        let entry = getUpdatedEntry()
+
+        MyWidgetEntryView(entry)
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }

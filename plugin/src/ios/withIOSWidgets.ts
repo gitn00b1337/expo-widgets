@@ -1,22 +1,9 @@
 import { WithExpoIOSWidgetsProps } from ".."
 import { ConfigPlugin, withInfoPlist } from "@expo/config-plugins"
 import { getTargetName, withWidgetXCode } from "./withWidgetXCode"
-import { withConfig } from "./withWidgetEAS"
+import { withConfig } from "./withConfig"
 import { withPodfile } from "./withPodfile"
 import { withModule } from "./withModule"
-
-export const withLiveActivities: ConfigPlugin<WithExpoIOSWidgetsProps> = (config, options) => {
-    config.ios = {
-        ...config.ios,
-        infoPlist: {
-            ...config.ios?.infoPlist,
-            NSSupportsLiveActivities: options?.useLiveActivities || false,
-            NSSupportsLiveActivitiesFrequentUpdates: options?.frequentUpdates || false,
-        }
-    }
-
-    return config;
-}
 
 const defaultOptions = (): WithExpoIOSWidgetsProps => {
     return {
@@ -26,9 +13,7 @@ const defaultOptions = (): WithExpoIOSWidgetsProps => {
         frequentUpdates: false,
         devTeamId: '',
         moduleDependencies: [],
-        xcode: {
-            generateAppGroup: true,
-        }
+        mode: 'production',
     }
 }
 
@@ -38,14 +23,10 @@ export const withIOSWidgets: ConfigPlugin<WithExpoIOSWidgetsProps> = (config, op
         ...options,
     }
 
-    config = withLiveActivities(config, defaultedOptions)
-    config = withModule(config, defaultedOptions)
-    config = withWidgetXCode(config, defaultedOptions)
-    config = withPodfile(config, {
-        targetName: `${getTargetName(config, defaultedOptions)}`,
-        projectName: config.name
-    })
-    config = withConfig(config, defaultedOptions)
+    withModule(config, defaultedOptions)
+    withWidgetXCode(config, defaultedOptions)
+    withPodfile(config, defaultedOptions)
+    withConfig(config, defaultedOptions)
 
     return config;
 }

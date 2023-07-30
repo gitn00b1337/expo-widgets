@@ -29,6 +29,8 @@ export type WithExpoIOSWidgetsProps = {
      * Apple developer team ID
      */
     devTeamId: string
+
+    mode?: 'development' | 'production'
     /**
      * XCode project overwrites. Use with caution!
      */

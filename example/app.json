@@ -30,28 +30,17 @@
         "../app.plugin.js",
         {
           "ios": {
-            "src": "./widgets/ios"
+            "src": "./widgets/ios",
+            "mode": "development",
+            "moduleDependencies": [
+              "MyData.swift"
+            ]
           }
         }
       ]
     ],
     "extra": {
-      "eas": {
-        "build": {
-          "experimental": {
-            "ios": {
-              "appExtensions": [
-                {
-                  "targetName": "expowidgetsWidgetExtension",
-                  "bundleIdentifier": "expo.modules.widgets.example.expowidgetsWidgetExtension",
-                  "entitlements": {}
-                }
-              ]
-            }
-          }
-        },
-        "projectId": "198071ab-2ac3-4c30-b45a-d6f3ba4d7983"
-      }
+      "projectId": "198071ab-2ac3-4c30-b45a-d6f3ba4d7983"
     }
   }
 }
