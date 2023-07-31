@@ -3,6 +3,7 @@ import { WithExpoIOSWidgetsProps } from ".."
 import { getBundleIdentifier, getTargetName } from "./withWidgetXCode"
 import { Logging } from "../utils/logger"
 import { ExpoConfig } from "@expo/config-types"
+import { getPushNotificationsMode } from "./xcode/withAppGroupEntitlements"
 
 const APP_GROUP_KEY = "com.apple.security.application-groups"
 
@@ -11,7 +12,8 @@ export const getAppGroupEntitlement = (config: ExpoConfig) => {
 }
 
 const withAppGroupPermissions: ConfigPlugin<WithExpoIOSWidgetsProps> = (
-  config
+  config,
+  options
 ) => {
   return withEntitlementsPlist(config, newConfig => {
     if (!Array.isArray(newConfig.modResults[APP_GROUP_KEY])) {
@@ -26,7 +28,9 @@ const withAppGroupPermissions: ConfigPlugin<WithExpoIOSWidgetsProps> = (
       return newConfig;
     }
 
-    modResultsArray.push(entitlement);
+    modResultsArray.push(entitlement)
+
+    newConfig.modResults['aps-environment'] = getPushNotificationsMode(options)
 
     return newConfig;
   });
@@ -40,6 +44,20 @@ const withAppExtensions: ConfigPlugin<WithExpoIOSWidgetsProps> = (config, option
   Logging.logger.debug(`withConfig:: adding target ${targetName} to appExtensions`)
   Logging.logger.debug(`withConfig:: adding bundle identifier ${bundleIdentifier} to appExtensions`)
   Logging.logger.debug(`withConfig:: adding entitlement ${entitlement} to appExtensions`)
+
+  const appGroupEntitlements = (config.ios?.entitlements && config.ios?.entitlements['com.apple.security.application-groups']) || []
+
+  config.ios = {
+    ...config.ios,
+    entitlements: {
+      ...(config.ios?.entitlements || []),
+      'com.apple.security.application-groups': [
+        ...appGroupEntitlements,
+        entitlement,
+      ],
+      'aps-environment': getPushNotificationsMode(options)
+    }
+  }
 
   config.extra = {
     ...config.extra,
@@ -60,7 +78,8 @@ const withAppExtensions: ConfigPlugin<WithExpoIOSWidgetsProps> = (config, option
                 entitlements: {
                   'com.apple.security.application-groups': [
                     entitlement,
-                  ]
+                  ],
+                  'aps-environment': getPushNotificationsMode(options)
                 },
               }
             ]
@@ -75,12 +94,12 @@ const withAppExtensions: ConfigPlugin<WithExpoIOSWidgetsProps> = (config, option
 
 const withLiveActivities: ConfigPlugin<WithExpoIOSWidgetsProps> = (config, options) => {
   config.ios = {
-      ...config.ios,
-      infoPlist: {
-          ...config.ios?.infoPlist,
-          NSSupportsLiveActivities: options?.useLiveActivities || false,
-          NSSupportsLiveActivitiesFrequentUpdates: options?.frequentUpdates || false,
-      }
+    ...config.ios,
+    infoPlist: {
+      ...config.ios?.infoPlist,
+      NSSupportsLiveActivities: options?.useLiveActivities || false,
+      NSSupportsLiveActivitiesFrequentUpdates: options?.frequentUpdates || false,
+    }
   }
 
   return config;

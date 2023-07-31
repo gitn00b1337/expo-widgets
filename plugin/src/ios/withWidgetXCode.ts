@@ -277,7 +277,7 @@ const addFilesToWidgetProject = (
     const groupPath = isBaseDirectory ? targetName : relativePath
     
     const pbxGroup = project.addPbxGroup(
-      allFiles,
+      [ ...allFiles, `${targetName}.entitlements`, `Info.plist`],
       groupTarget, // name 
       groupPath, // the path is the folder name. For top level files this is the project name.
       '"<group>"'

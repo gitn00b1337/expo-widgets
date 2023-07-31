@@ -1,4 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
+
+
+// EAS fails without the info.plist file updated in the widget extension project
+
+import { ExportedConfigWithProps } from "@expo/config-plugins";
+import { WithExpoIOSWidgetsProps } from "../..";
+import path from "path";
+import { getTargetName } from "../withWidgetXCode";
+import fsExtra from "fs-extra"
+
+const getPlistContents = (bundleVersion: string, shortVersion: string) => {
+    return `<?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">
     <dict>
@@ -27,4 +38,16 @@
         </dict>
     </dict>
     </plist>
+    `;
+}
+
+export const withWidgetInfoPlist = (config: ExportedConfigWithProps<unknown>, options: WithExpoIOSWidgetsProps) => {
+    const targetName = getTargetName(config, options)
+    const plistFilePath = path.join(config.modRequest.projectRoot, 'ios', targetName, 'Info.plist')
     
+    const bundleVersion = config.ios?.buildNumber ?? '1'
+    const shortVersion = config?.version ?? '1.0'
+    const plistContents = getPlistContents(bundleVersion, shortVersion)
+    
+    fsExtra.writeFileSync(plistFilePath, plistContents)
+}

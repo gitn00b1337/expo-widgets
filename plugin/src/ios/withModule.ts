@@ -44,6 +44,10 @@ export const withModule: ConfigPlugin<WithExpoIOSWidgetsProps> = (
                 fsExtra.outputFileSync(expoModulePath, contents)
             }
 
+            const writtenContent = fsExtra.readFileSync(moduleFile, 'utf-8')
+            Logging.logger.debug(`Module.swift contents::`)
+            Logging.logger.debug(writtenContent)
+
             return props
         }
         catch (e) {

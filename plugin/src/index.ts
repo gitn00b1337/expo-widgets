@@ -37,7 +37,6 @@ export type WithExpoIOSWidgetsProps = {
     xcode?: {
         targetName?: string
         widgetBundleIdentifier?: string
-        generateAppGroup?: boolean
         appGroupId?: string
     }
     /**
