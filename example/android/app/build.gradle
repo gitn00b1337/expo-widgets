@@ -113,13 +113,13 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace 'expo.modules.widgets.example'
+    namespace "com.expowidgets"
     defaultConfig {
-        applicationId 'expo.modules.widgets.example'
+        applicationId "com.expowidgets"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0.0"
+        versionName "1.0"
     }
 
     splits {

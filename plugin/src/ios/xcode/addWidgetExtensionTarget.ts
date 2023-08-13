@@ -97,7 +97,7 @@ export const addWidgetExtensionTarget = (project: XcodeProject, config: ExpoConf
             uuid: targetUuid,
             pbxNativeTarget: {
                 isa: 'PBXNativeTarget',
-                name: '"' + targetName + '"',
+                name: targetName,
                 productName: '"' + targetName + '"',
                 productReference: productFile.fileRef,
                 productType: '"' + productTypeForTargetType(targetType) + '"',
@@ -110,7 +110,6 @@ export const addWidgetExtensionTarget = (project: XcodeProject, config: ExpoConf
 
     // Target: Add to PBXNativeTarget section
     project.addToPbxNativeTargetSection(target)
-
 
     project.addTargetAttribute('DevelopmentTeam', options.devTeamId, target)
     project.addTargetAttribute('DevelopmentTeam', options.devTeamId)

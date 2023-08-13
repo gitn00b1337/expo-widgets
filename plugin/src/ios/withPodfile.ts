@@ -1,5 +1,5 @@
 import { mergeContents } from "@expo/config-plugins/build/utils/generateCode"
-import { ConfigPlugin, withDangerousMod } from "expo/config-plugins"
+import { ExportedConfigWithProps, XcodeProject, } from "expo/config-plugins"
 import * as fs from "fs"
 import * as path from "path"
 import { Logging } from "../utils/logger"
@@ -8,19 +8,16 @@ import { WithExpoIOSWidgetsProps } from ".."
 import { withAppGroupEntitlements } from "./xcode/withAppGroupEntitlements"
 import { withWidgetInfoPlist } from "./xcode/withWidgetInfoPlist"
 
-export const withPodfile: ConfigPlugin<WithExpoIOSWidgetsProps> = (config, options) => {
+export const withPodfile = (config: ExportedConfigWithProps<XcodeProject>, options: WithExpoIOSWidgetsProps) => {
   const targetName = `${getTargetName(config, options)}`
 
-  return withDangerousMod(config, [
-    "ios",
-    (config) => {
-      withAppGroupEntitlements(config, options)
-      withWidgetInfoPlist(config, options)
+  withAppGroupEntitlements(config, options)
+  withWidgetInfoPlist(config, options)
 
-      const podFilePath = path.join( config.modRequest.platformProjectRoot, "Podfile" );
-      let podFileContent = fs.readFileSync(podFilePath).toString();
+  const podFilePath = path.join(config.modRequest.platformProjectRoot, "Podfile");
+  let podFileContent = fs.readFileSync(podFilePath).toString();
 
-      const podInstaller =`
+  const podInstaller = `
 target '${targetName}' do
   use_expo_modules!
   config = use_native_modules!
@@ -44,45 +41,44 @@ target '${targetName}' do
 end
       `
 
-      const withAppExtFix = mergeContents({
-        tag: "app_ext_fix",
-        src: podFileContent,
-        newSrc: `
+  const withAppExtFix = mergeContents({
+    tag: "app_ext_fix",
+    src: podFileContent,
+    newSrc: `
         config.build_settings['APPLICATION_EXTENSION_API_ONLY'] = 'No'
         `,
-        anchor: /resource_bundle_target.build_configurations.each do \|config\|/,
-        offset: 1,
-        comment: "#",
-      })
+    anchor: /resource_bundle_target.build_configurations.each do \|config\|/,
+    offset: 1,
+    comment: "#",
+  })
 
-      const withAppExtFixPt2 = mergeContents({
-        tag: 'fix2',
-        src: withAppExtFix.contents,
-        newSrc: ` installer.pods_project.targets.each do |target|
+  const withAppExtFixPt2 = mergeContents({
+    tag: 'fix2',
+    src: withAppExtFix.contents,
+    newSrc: ` installer.pods_project.targets.each do |target|
         target.build_configurations.each do |config|
           config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
           config.build_settings['APPLICATION_EXTENSION_API_ONLY'] = 'No'        
         end
       end`,
-        anchor: /post_install do \|installer\|/,
-        offset: 1,
-        comment: "#",
-      })
+    anchor: /post_install do \|installer\|/,
+    offset: 1,
+    comment: "#",
+  })
 
-      const withPodInstall = mergeContents({
-        tag: 'expo-widgets',
-        src: withAppExtFixPt2.contents,
-        newSrc: podInstaller,
-        anchor: /target /,// new RegExp(`target '${projectName}' do`),
-        offset: 0,
-        comment: "#",
-      })
-        
-      Logging.logger.debug('Updating podfile')      
-    
-      fs.writeFileSync(podFilePath, withPodInstall.contents);
+  const withPodInstall = mergeContents({
+    tag: 'expo-widgets',
+    src: withAppExtFixPt2.contents,
+    newSrc: podInstaller,
+    anchor: /target /,// new RegExp(`target '${projectName}' do`),
+    offset: 0,
+    comment: "#",
+  })
 
-      return config;
-    },
-  ]);
-};
+  Logging.logger.debug('Updating podfile')
+
+  fs.writeFileSync(podFilePath, withPodInstall.contents);
+
+  return config;
+
+}

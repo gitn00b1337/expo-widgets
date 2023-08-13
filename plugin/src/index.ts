@@ -53,6 +53,7 @@ export type WithExpoWidgetsProps = {
 const withExpoWidgets: ConfigPlugin<WithExpoWidgetsProps> = (config, options) => {
     if (options.android) config = withAndroidWidgets(config, options.android);
     if (options.ios) config = withIOSWidgets(config, options.ios);
+
     return config;
 }
 

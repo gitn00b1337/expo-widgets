@@ -38,31 +38,6 @@ elsif podfile_properties.key?('ios.flipper') then
   end
 end
 
-# @generated begin expo-widgets - expo prebuild (DO NOT MODIFY) sync-b0394ce9548294136ac5f58590f11937e90793de
-
-target 'expowidgetsWidgetExtension' do
-  use_expo_modules!
-  config = use_native_modules!
-
-  use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
-  use_frameworks! :linkage => ENV['USE_FRAMEWORKS'].to_sym if ENV['USE_FRAMEWORKS']
-
-  # Flags change depending on the env values.
-  flags = get_default_flags()
-
-  use_react_native!(
-    :path => config[:reactNativePath],
-    :hermes_enabled => podfile_properties['expo.jsEngine'] == nil || podfile_properties['expo.jsEngine'] == 'hermes',
-    :fabric_enabled => flags[:fabric_enabled],
-    # An absolute path to your application root.
-    :app_path => "#{Pod::Config.instance.installation_root}/..",
-    # Note that if you have use_frameworks! enabled, Flipper will not work if enabled
-    :flipper_configuration => flipper_config
-  )
-
-end
-      
-# @generated end expo-widgets
 target 'expowidgets' do
   use_expo_modules!
   config = use_native_modules!
@@ -84,14 +59,6 @@ target 'expowidgets' do
   )
 
   post_install do |installer|
-# @generated begin fix2 - expo prebuild (DO NOT MODIFY) sync-8f5a065399fe8e6d9e5268295047ec3eb1f252b5
- installer.pods_project.targets.each do |target|
-        target.build_configurations.each do |config|
-          config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
-          config.build_settings['APPLICATION_EXTENSION_API_ONLY'] = 'No'        
-        end
-      end
-# @generated end fix2
     react_native_post_install(
       installer,
       config[:reactNativePath],
@@ -107,11 +74,6 @@ target 'expowidgets' do
       .each do |pod_name, target_installation_result|
       target_installation_result.resource_bundle_targets.each do |resource_bundle_target|
         resource_bundle_target.build_configurations.each do |config|
-# @generated begin app_ext_fix - expo prebuild (DO NOT MODIFY) sync-a8847e556379a74e15053c111e732efd443a664b
-
-        config.build_settings['APPLICATION_EXTENSION_API_ONLY'] = 'No'
-        
-# @generated end app_ext_fix
           config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
         end
       end

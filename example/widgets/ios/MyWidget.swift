@@ -2,8 +2,9 @@ import WidgetKit
 import SwiftUI
 
 func getEntry() -> SimpleEntry {
+    let widgetSuite = UserDefaults(suiteName: "group.expo.modules.widgets.example.expowidgets")
 
-    if let data = UserDefaults.standard.data(forKey: "MyData") {
+    if let data = widgetSuite?.data(forKey: "MyData") {
         do {
             let decoder = JSONDecoder()
             let data = try decoder.decode(MyData.self, from: data)
@@ -24,7 +25,7 @@ func getEntry() -> SimpleEntry {
 
     return SimpleEntry(
         date: Date(),
-        message: "Placeholder. If this message appears in iOS, do you have a dev account set up correctly with signing permissions?"
+        message: "Do you have a dev account set up correctly with signing permissions?"
     )
 }
 
@@ -60,6 +61,17 @@ struct MyWidgetEntryView : View {
     
     var body: some View {
         Text(entry.message)
+            .font(.montserratBold(size: 13))
+            .foregroundColor(
+                Color(
+                    #colorLiteral(
+                        red: 56.0 / 255.0,
+                        green: 49.0 / 255.0,
+                        blue: 140.0 / 255.0,
+                        alpha: 1
+                    )
+                )
+            )
     }
 }
 

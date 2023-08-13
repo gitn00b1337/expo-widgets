@@ -1,6 +1,6 @@
 import { WithExpoIOSWidgetsProps } from ".."
-import { ConfigPlugin, withInfoPlist } from "@expo/config-plugins"
-import { getTargetName, withWidgetXCode } from "./withWidgetXCode"
+import { ConfigPlugin, withXcodeProject } from "@expo/config-plugins"
+import { withWidgetXCode } from "./withWidgetXCode"
 import { withConfig } from "./withConfig"
 import { withPodfile } from "./withPodfile"
 import { withModule } from "./withModule"
@@ -23,10 +23,13 @@ export const withIOSWidgets: ConfigPlugin<WithExpoIOSWidgetsProps> = (config, op
         ...options,
     }
 
-    withModule(config, defaultedOptions)
-    withWidgetXCode(config, defaultedOptions)
-    withPodfile(config, defaultedOptions)
     withConfig(config, defaultedOptions)
 
-    return config;
+    return withXcodeProject(config, config => {
+        withModule(config, defaultedOptions)
+        withWidgetXCode(config, defaultedOptions)
+        withPodfile(config, defaultedOptions)
+
+        return config;
+    })    
 }

@@ -28,9 +28,9 @@ const getPlistContents = (bundleVersion: string, shortVersion: string) => {
         <key>CFBundlePackageType</key>
         <string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
         <key>CFBundleShortVersionString</key>
-        <string>$(APP_VERSION)</string>
+        <string>${shortVersion}</string>
         <key>CFBundleVersion</key>
-        <string>$(APP_BUILD)</string>
+        <string>${bundleVersion}</string>
         <key>NSExtension</key>
         <dict>
             <key>NSExtensionPointIdentifier</key>
@@ -45,6 +45,7 @@ export const withWidgetInfoPlist = (config: ExportedConfigWithProps<unknown>, op
     const targetName = getTargetName(config, options)
     const plistFilePath = path.join(config.modRequest.projectRoot, 'ios', targetName, 'Info.plist')
     
+    // see docs.expo.dev/build-reference/app-versions
     const bundleVersion = config.ios?.buildNumber ?? '1'
     const shortVersion = config?.version ?? '1.0'
     const plistContents = getPlistContents(bundleVersion, shortVersion)

@@ -8,6 +8,7 @@
     "prebuild": "EXPO_NO_GIT_STATUS=true expo prebuild --clean"
   },
   "dependencies": {
+    "@bittingz/expo-native-fonts": "^0.1.5",
     "@bittingz/expo-widgets": "^0.5.5",
     "expo": "~48.0.18",
     "expo-splash-screen": "~0.18.2",
