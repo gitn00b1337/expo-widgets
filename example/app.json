@@ -26,21 +26,7 @@
       "package": "expo.modules.widgets.example"
     },
     "plugins": [
-      [
-        "@bittingz/expo-native-fonts",
-        {
-          "srcFolder": "./fonts",
-              "fonts": [
-                {
-                  "filePath": "Montserrat/Montserrat-Bold.ttf",
-                  "targets": [
-                    "expowidgetsWidgetExtension"
-                  ],
-                  "platform": "ios"
-                }
-              ]
-        }
-      ],
+      
       [
         "../app.plugin.js",
         {

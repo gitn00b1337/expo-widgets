@@ -5,14 +5,9 @@ import * as path from "path"
 import { Logging } from "../utils/logger"
 import { getTargetName } from "./withWidgetXCode"
 import { WithExpoIOSWidgetsProps } from ".."
-import { withAppGroupEntitlements } from "./xcode/withAppGroupEntitlements"
-import { withWidgetInfoPlist } from "./xcode/withWidgetInfoPlist"
 
 export const withPodfile = (config: ExportedConfigWithProps<XcodeProject>, options: WithExpoIOSWidgetsProps) => {
   const targetName = `${getTargetName(config, options)}`
-
-  withAppGroupEntitlements(config, options)
-  withWidgetInfoPlist(config, options)
 
   const podFilePath = path.join(config.modRequest.platformProjectRoot, "Podfile");
   let podFileContent = fs.readFileSync(podFilePath).toString();

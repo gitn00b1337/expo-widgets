@@ -41,16 +41,16 @@ const withAppExtensions: ConfigPlugin<WithExpoIOSWidgetsProps> = (config, option
   const bundleIdentifier = getBundleIdentifier(config, options)
   const entitlement = getAppGroupEntitlement(config)
 
-  Logging.logger.debug(`withConfig:: adding target ${targetName} to appExtensions`)
-  Logging.logger.debug(`withConfig:: adding bundle identifier ${bundleIdentifier} to appExtensions`)
-  Logging.logger.debug(`withConfig:: adding entitlement ${entitlement} to appExtensions`)
+  // Logging.logger.debug(`withConfig:: adding target ${targetName} to appExtensions`)
+  // Logging.logger.debug(`withConfig:: adding bundle identifier ${bundleIdentifier} to appExtensions`)
+  // Logging.logger.debug(`withConfig:: adding entitlement ${entitlement} to appExtensions`)
 
-  const appGroupEntitlements = (config.ios?.entitlements && config.ios?.entitlements['com.apple.security.application-groups']) || []
+  const appGroupEntitlements = (config.ios?.entitlements && config.ios.entitlements['com.apple.security.application-groups']) || []
 
   config.ios = {
     ...config.ios,
     entitlements: {
-      ...(config.ios?.entitlements || []),
+      ...(config.ios?.entitlements || {}),
       'com.apple.security.application-groups': [
         ...appGroupEntitlements,
         entitlement,

@@ -30,19 +30,25 @@ export type WithExpoIOSWidgetsProps = {
      */
     devTeamId: string
 
+    targetName?: string
+
     mode?: 'development' | 'production'
     /**
      * XCode project overwrites. Use with caution!
      */
     xcode?: {
-        targetName?: string
         widgetBundleIdentifier?: string
         appGroupId?: string
+        configOverrides?: { [ attributeName: string ]: string }
     }
     /**
      * A collection of relative file paths to files your module file needs (like shared models)
      */
     moduleDependencies: string[]
+    /**
+     * Plugins to run after the widget extension is created
+     */
+    widgetExtPlugins: ConfigPlugin<any>[]
 }
 
 export type WithExpoWidgetsProps = {

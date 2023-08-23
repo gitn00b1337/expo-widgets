@@ -18,7 +18,7 @@ public extension Font {
     return Font.system(size: size).weight(weight)
   }
   
-  public static func montserratBold(size: CGFloat) -> Font {
+  static func montserratBold(size: CGFloat) -> Font {
     return Font.customFont(
       familyName: "Montserrat",
       fontName: "Montserrat-Bold",

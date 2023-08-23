@@ -4,7 +4,6 @@
     "slug": "expo-widgets",
     "version": "0.1.0",
     "description": "An expo module that allows you to make native widgets in iOS and android",
-    "sdkVersion": "49.0.0",
     "platforms": [
       "ios",
       "android"

@@ -30,14 +30,7 @@ export const addWidgetExtensionTarget = (project: XcodeProject, config: ExpoConf
         throw new Error("Target type invalid: " + targetType);
     }
 
-    const settings = getDefaultBuildConfigurationSettings({
-        targetName: getTargetName(config, options),
-        deploymentTarget: options.deploymentTarget,
-        developmentTeamId: options.devTeamId,
-        bundleIdentifier: getBundleIdentifier(config, options),
-        currentProjectVersion: config.ios?.buildNumber || '1',
-        marketingVersion: config.version || '1.0',
-      });
+    const settings = getDefaultBuildConfigurationSettings(options, config);
 
     // Build Configuration: Create
     var buildConfigurationsList = [

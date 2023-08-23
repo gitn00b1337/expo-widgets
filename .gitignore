@@ -6,6 +6,9 @@
 .vscode/
 jsconfig.json
 
+**/android/
+**/ios/
+
 # Xcode
 #
 build/

@@ -7,21 +7,14 @@ import { WithExpoIOSWidgetsProps } from ".."
 import { addWidgetExtensionTarget } from "./xcode/addWidgetExtensionTarget"
 import { Logging } from "../utils/logger"
 
-export const getDefaultBuildConfigurationSettings = ({
-  targetName,
-  currentProjectVersion = '1',
-  deploymentTarget = '16.2',
-  bundleIdentifier,
-  developmentTeamId,
-  marketingVersion,
-}: {
-  targetName: string,
-  currentProjectVersion: string,
-  deploymentTarget: string,
-  bundleIdentifier: string,
-  developmentTeamId: string,
-  marketingVersion: string,
-}) => {
+export const getDefaultBuildConfigurationSettings = (options: WithExpoIOSWidgetsProps, config: ExpoConfig) => {
+  const targetName = getTargetName(config, options)
+  const deploymentTarget = options.deploymentTarget
+  const developmentTeamId = options.devTeamId
+  const bundleIdentifier = getBundleIdentifier(config, options)
+  const currentProjectVersion = config.ios?.buildNumber || '1'
+  const marketingVersion = config.version || '1.0'
+
   return {
     ALWAYS_SEARCH_USER_PATHS: 'NO',
     ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'YES',
@@ -58,6 +51,7 @@ export const getDefaultBuildConfigurationSettings = ({
     SWIFT_OPTIMIZATION_LEVEL: "-Onone",
     SWIFT_VERSION: "5.4",
     TARGETED_DEVICE_FAMILY: '"1,2"',
+    ...(options.xcode || {}),
   }
 }
 
@@ -68,8 +62,8 @@ export const getDefaultBuildConfigurationSettings = ({
  * @returns The target name
  */
 export const getTargetName = (config: ExpoConfig, options: WithExpoIOSWidgetsProps) => {
-  if (options.xcode?.targetName) {
-    return IOSConfig.XcodeUtils.sanitizedName(options.xcode.targetName)
+  if (options.targetName) {
+    return IOSConfig.XcodeUtils.sanitizedName(options.targetName)
   }
 
   const cleanName = IOSConfig.XcodeUtils.sanitizedName(config.name)
