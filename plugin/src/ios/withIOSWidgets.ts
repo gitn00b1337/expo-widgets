@@ -21,9 +21,25 @@ const defaultOptions = (): WithExpoIOSWidgetsProps => {
 }
 
 export const withIOSWidgets: ConfigPlugin<WithExpoIOSWidgetsProps> = (config, options) => {
+    const {
+        src,
+        deploymentTarget,
+        useLiveActivities,
+        frequentUpdates,
+        moduleDependencies,
+        mode,
+        widgetExtPlugins,
+    } = defaultOptions()
+
     const defaultedOptions = {
-        ...defaultOptions,
-        ...options,
+        src: options.src || src,
+        deploymentTarget: options.deploymentTarget || deploymentTarget,
+        useLiveActivities: options.useLiveActivities || useLiveActivities,
+        frequentUpdates: options.frequentUpdates || frequentUpdates,
+        devTeamId: options.devTeamId,
+        moduleDependencies: options.moduleDependencies || moduleDependencies,
+        mode: options.mode || mode,
+        widgetExtPlugins: options.widgetExtPlugins || widgetExtPlugins,
     }
 
     withConfig(config, defaultedOptions)
