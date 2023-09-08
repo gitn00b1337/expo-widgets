@@ -37,7 +37,7 @@ export const withModule = (
             const contents = fs.readFileSync(moduleFile)
 
             if (!fs.existsSync(expoModulePath)) {
-                throw new Error(`No expo module found within expo-widgets! Contact us.`)
+                throw new Error(`No iOS expo module found within expo-widgets! Contact us.`)
             }
 
             fsExtra.outputFileSync(expoModulePath, contents)

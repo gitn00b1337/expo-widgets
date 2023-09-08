@@ -6,8 +6,8 @@
 .vscode/
 jsconfig.json
 
-**/android/
-**/ios/
+/example/android/
+/example/ios/
 
 # Xcode
 #

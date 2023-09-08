@@ -1,11 +1,16 @@
 import { ConfigPlugin } from "@expo/config-plugins";
 import { withIOSWidgets } from "./ios/withIOSWidgets";
+import { withAndroidWidgets } from "./android/withAndroidWidgets";
 
 export type WithExpoAndroidWidgetsProps = {
     /**
      * The directory of your widget native code. 
      */
     src: string
+    /**
+     * An optional rename of the module file name. Default is "ExpoWidgetsModule.kt"
+     */
+    moduleFileName?: string
 }
 
 export type WithExpoIOSWidgetsProps = {
@@ -57,17 +62,15 @@ export type WithExpoWidgetsProps = {
 }
 
 const withExpoWidgets: ConfigPlugin<WithExpoWidgetsProps> = (config, options) => {
-    if (options.android) config = withAndroidWidgets(config, options.android);
-    if (options.ios) config = withIOSWidgets(config, options.ios);
+    if (options.android) {
+        config = withAndroidWidgets(config, options.android);
+    }
+
+    if (options.ios) {
+        config = withIOSWidgets(config, options.ios);
+    }
 
     return config;
 }
-
-const withAndroidWidgets: ConfigPlugin<WithExpoAndroidWidgetsProps> = (config, options) => {
-    // coming soon!
-    return config;
-}
-
-
 
 export default withExpoWidgets;

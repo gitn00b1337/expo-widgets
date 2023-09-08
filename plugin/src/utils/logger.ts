@@ -18,6 +18,14 @@ class Logger {
 
         console.debug(message, ...optionalParams)
     }
+
+    warn(message?: any, ...optionalParams: any[]) {
+        if (!this.consoleAvailable) {
+            return;
+        }
+
+        console.warn(message, optionalParams);
+    }
 }
 
 export class Logging {
