@@ -31,7 +31,7 @@ export const withModule: ConfigPlugin<WithExpoAndroidWidgetsProps> = (
             );
 
             if (!fs.existsSync(moduleSourcePath)) {
-                const contents = getTemplate(packageNameAsPath);
+                const contents = getTemplate(packageName);
                 fs.writeFileSync(moduleDestinationPath, contents);
             }
 
