@@ -1,8 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import { ExpoWidgetsModule } from "@bittingz/expo-widgets"
 
 export default function App() {
-  ExpoWidgetsModule.setData({ message: 'Hello world!' })
+  if (Platform.OS === 'ios') {
+    ExpoWidgetsModule.setData({ message: 'Hello world!' })
+  }
 
   return (
     <View style={styles.container}>

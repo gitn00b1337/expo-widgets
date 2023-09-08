@@ -26,7 +26,6 @@
       "package": "expo.modules.widgets.example"
     },
     "plugins": [
-      
       [
         "../app.plugin.js",
         {
@@ -36,12 +35,36 @@
             "moduleDependencies": [
               "MyData.swift"
             ]
+          },
+          "android": {
+            "src": "./widgets/android"
           }
         }
       ]
     ],
     "extra": {
-      "projectId": "198071ab-2ac3-4c30-b45a-d6f3ba4d7983"
+      "projectId": "198071ab-2ac3-4c30-b45a-d6f3ba4d7983",
+      "eas": {
+        "build": {
+          "experimental": {
+            "ios": {
+              "appExtensions": [
+                {
+                  "targetName": "expowidgetsWidgetExtension",
+                  "bundleIdentifier": "expo.modules.widgets.example.expowidgetsWidgetExtension",
+                  "entitlements": {
+                    "com.apple.security.application-groups": [
+                      "group.expo.modules.widgets.example.expowidgets"
+                    ],
+                    "aps-environment": "development"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "projectId": "198071ab-2ac3-4c30-b45a-d6f3ba4d7983"
+      }
     }
   }
 }
