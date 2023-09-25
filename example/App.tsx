@@ -1,9 +1,10 @@
 import { Platform, StyleSheet, Text, View } from 'react-native';
-import { ExpoWidgetsModule } from "@bittingz/expo-widgets"
+import * as ExpoWidgetsModule from "@bittingz/expo-widgets"
 
 export default function App() {
   if (Platform.OS === 'ios') {
-    ExpoWidgetsModule.setData({ message: 'Hello world!' })
+    console.log('Setting data')
+    ExpoWidgetsModule.setWidgetData({ message: 'Hello world!' })
   }
 
   return (

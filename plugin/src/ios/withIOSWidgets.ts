@@ -42,7 +42,7 @@ export const withIOSWidgets: ConfigPlugin<WithExpoIOSWidgetsProps> = (config, op
         widgetExtPlugins: options.widgetExtPlugins || widgetExtPlugins,
     }
 
-    withConfig(config, defaultedOptions)
+    config = withConfig(config, defaultedOptions)
 
     return withXcodeProject(config, config => {
         withModule(config, defaultedOptions)
