@@ -59,6 +59,7 @@ export type WithExpoIOSWidgetsProps = {
 export type WithExpoWidgetsProps = {
     android?: WithExpoAndroidWidgetsProps
     ios?: WithExpoIOSWidgetsProps
+    
 }
 
 const withExpoWidgets: ConfigPlugin<WithExpoWidgetsProps> = (config, options) => {

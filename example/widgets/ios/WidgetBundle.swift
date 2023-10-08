@@ -2,7 +2,7 @@ import SwiftUI
 import WidgetKit
 
 @main
-struct PizzaDeliveryWidgetBundle: WidgetBundle {
+struct WidgetBundle: WidgetBundle {
     var body: some Widget {
         MyWidget()
     }

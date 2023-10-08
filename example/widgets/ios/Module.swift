@@ -14,7 +14,7 @@ public class ExpoWidgetsModule: Module {
     public func definition() -> ModuleDefinition {
         Name("ExpoWidgets")
         
-        Function("setData") { (props: SetDataProps) -> Void in   
+        Function("setWidgetData") { (props: SetDataProps) -> Void in   
             let logger = Logger()        
             do {
                 let myData = MyData(

@@ -17,6 +17,9 @@ const defaultOptions = (): WithExpoIOSWidgetsProps => {
         moduleDependencies: [],
         mode: 'production',
         widgetExtPlugins: [],
+        xcode: {
+
+        }
     }
 }
 
@@ -29,6 +32,7 @@ export const withIOSWidgets: ConfigPlugin<WithExpoIOSWidgetsProps> = (config, op
         moduleDependencies,
         mode,
         widgetExtPlugins,
+        xcode,
     } = defaultOptions()
 
     const defaultedOptions = {
@@ -40,6 +44,11 @@ export const withIOSWidgets: ConfigPlugin<WithExpoIOSWidgetsProps> = (config, op
         moduleDependencies: options.moduleDependencies || moduleDependencies,
         mode: options.mode || mode,
         widgetExtPlugins: options.widgetExtPlugins || widgetExtPlugins,
+        xcode: {
+            widgetBundleIdentifier: options.xcode?.widgetBundleIdentifier || xcode?.widgetBundleIdentifier,
+            appGroupId: options.xcode?.appGroupId || xcode?.appGroupId,
+            configOverrides: options.xcode?.configOverrides ||  xcode?.configOverrides,
+        }
     }
 
     config = withConfig(config, defaultedOptions)
