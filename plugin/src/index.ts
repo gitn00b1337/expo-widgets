@@ -7,10 +7,6 @@ export type WithExpoAndroidWidgetsProps = {
      * The directory of your widget native code. 
      */
     src: string
-    /**
-     * An optional rename of the module file name. Default is "ExpoWidgetsModule.kt"
-     */
-    moduleFileName?: string
 }
 
 export type WithExpoIOSWidgetsProps = {

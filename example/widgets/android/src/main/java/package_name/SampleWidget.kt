@@ -1,9 +1,10 @@
-package com.example.app
+package expo.modules.widgets.example;
 
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.widget.RemoteViews
+import android.content.SharedPreferences
 
 /**
  * Implementation of App Widget functionality.
@@ -34,8 +35,9 @@ internal fun updateAppWidget(
     appWidgetManager: AppWidgetManager,
     appWidgetId: Int
 ) {
-    val widgetText = context.getString(R.string.appwidget_text)
-    // Construct the RemoteViews object
+    //val widgetText = context.getString(R.string.appwidget_text)
+    val widgetText = context.getSharedPreferences(context.packageName + ".widgetdata", Context.MODE_PRIVATE).getString("widgetdata", "{}")
+   
     val views = RemoteViews(context.packageName, R.layout.sample_widget)
     views.setTextViewText(R.id.appwidget_text, widgetText)
 

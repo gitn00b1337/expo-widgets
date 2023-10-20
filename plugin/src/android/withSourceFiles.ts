@@ -83,14 +83,12 @@ function copySourceFiles(
             fs.emptyDirSync(destinationPath);
         }
         
+        const file = path.basename(relativePath);
+        
+        if (file === "Module.kt") {
+            Logging.logger.debug("Module file skipped during source file copy.");
+            continue;
+        }
         fs.copySync(sourcePath, destinationPath);
     }
-}
-
-function ensureModuleFile(widgetFolderPath: string, platformRoot: string, packageName: string) {
-    const packageNameAsPath = packageName?.replace(/\./g, "/");
-    const moduleSourcePath = path.join(widgetFolderPath, 'src/main/java/package_name/ExpoWidgetsModule.kt');
-    const moduleDestinationPath = path.join(platformRoot, 'app/src/main/java', packageNameAsPath, 'ExpoWidgetsModule.kt');
-
-    safeCopy(moduleSourcePath, moduleDestinationPath);
 }

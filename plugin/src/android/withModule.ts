@@ -3,6 +3,7 @@ import { WithExpoAndroidWidgetsProps } from ".."
 import fs from "fs-extra"
 import { ConfigPlugin, withDangerousMod, AndroidConfig } from "@expo/config-plugins"
 import { getTemplate } from "./module-template"
+import { Logging } from "../utils/logger"
 
 export const withModule: ConfigPlugin<WithExpoAndroidWidgetsProps> = (
     config,
@@ -13,6 +14,7 @@ export const withModule: ConfigPlugin<WithExpoAndroidWidgetsProps> = (
         async newConfig => {
             const { modRequest } = newConfig;
 
+            const projectRoot = modRequest.projectRoot;            
             const platformRoot = modRequest.platformProjectRoot;
             const widgetFolderPath = path.join(modRequest.projectRoot, options.src);
             const packageName = AndroidConfig.Package.getPackage(config);
@@ -24,15 +26,19 @@ export const withModule: ConfigPlugin<WithExpoAndroidWidgetsProps> = (
             const packageNameAsPath = packageName?.replace(/\./g, "/");
             const moduleSourcePath = path.join(widgetFolderPath, 'src/main/java/package_name/ExpoWidgetsModule.kt');
             const moduleDestinationPath = path.join(
-                platformRoot, 
-                'app/src/main/java', 
+                projectRoot, 
+                'android/src/main/java', 
                 packageNameAsPath, 
-                'ExpoWidgetsModule.kt'
+                'Module.kt'
             );
 
             if (!fs.existsSync(moduleSourcePath)) {
+                Logging.logger.debug('No module file found. Adding template...');
                 const contents = getTemplate(packageName);
-                fs.writeFileSync(moduleDestinationPath, contents);
+                // fs.writeFileSync(moduleDestinationPath, contents);
+            }
+            else {
+                // fs.writeFileSync()
             }
 
             return newConfig;
