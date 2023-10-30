@@ -77,4 +77,8 @@ yarn-error.log
 web-build/
 dist/
 
+build-*.apk
+build-*.ipa
+build-*.aab
+
 # @end expo-cli
