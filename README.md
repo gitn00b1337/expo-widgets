@@ -47,7 +47,7 @@ npm run prebuild
 npx expo run:ios
 ```
 
-# Need Custom Fonts?
+## Need Custom Fonts?
 
 Give my [other expo module a try](https://github.com/gitn00b1337/expo-native-fonts). You'll need to put the fonts config before the widgets config.
 
