@@ -2,8 +2,6 @@
 
 An expo module that allows you to make native widgets in iOS and android.
 
-IMPORTANT: Android is now under testing. iOS is production ready. Live activities are frequentUpdates are yet to be tested. Data transfer between widgets works well.
-
 # Installation
 
 ```npx expo install @bittingz/expo-widgets```
