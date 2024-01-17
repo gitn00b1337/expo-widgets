@@ -37,6 +37,20 @@ See the example project for more clarity. You can omit the android or ios folder
 6. To share data between your app and widgets you can use a variety of methods, but the easiest way is to use UserPreferences. This plugin automatically handles it for you, so all you have to do is make sure to use a suiteName with the correct format. See the example project.
 7. If you want to use custom fonts in your widget, use my expo-native-fonts package. See the example project for usage. 
 
+# Overriding xcode options
+
+If you need to override xcode options (such as handling a swift version mismatch) you can add the following:
+
+```
+xcode: {
+    configOverrides: {
+        SWIFT_VERSION: '5.0',
+    },                        
+},
+```
+
+The configOverrides properties are the xcodeproj values and must match case exactly.
+
 ## Running the example project
 
 ```
