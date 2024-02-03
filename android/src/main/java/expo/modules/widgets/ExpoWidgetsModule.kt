@@ -1,4 +1,4 @@
-package expo.modules.widgets;
+package expo.modules.widgets
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -9,8 +9,8 @@ class ExpoWidgetsModule : Module() {
   override fun definition() = ModuleDefinition {
     Name("ExpoWidgets")
 
-    Function("setWidgetData") { data: String -> 
-      getPreferences().edit().putString("widgetdata", data).commit()
+    Function("setWidgetData") { json: String -> 
+      getPreferences().edit().putString("widgetdata", json).commit()
     }
   }
 

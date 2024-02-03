@@ -15,3 +15,14 @@ export const withWidgetAppBuildGradle: ConfigPlugin = config => {
     return newConfig
   })
 }
+
+export const withGsonGradle: ConfigPlugin = config => {
+  return withAppBuildGradle(config, async newConfig => {
+    const buildGradle = newConfig.modResults.contents
+    const search = /(dependencies {\n)/gm
+    const replace = `dependencies {\n\timplementation("com\.google\.code\.gson:gson:2\.10\.1")\n`
+    const newBuildGradle = buildGradle.replace(search, replace)
+    newConfig.modResults.contents = newBuildGradle
+    return newConfig
+  });
+}

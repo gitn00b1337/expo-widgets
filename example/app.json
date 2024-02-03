@@ -6,6 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "owner": "world-net-zero",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -27,7 +28,7 @@
     },
     "plugins": [
       [
-        "../app.plugin.js",
+        "@bittingz/expo-widgets",
         {
           "ios": {
             "src": "./widgets/ios",

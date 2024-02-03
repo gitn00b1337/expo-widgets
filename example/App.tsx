@@ -1,9 +1,19 @@
 import { Platform, StyleSheet, Text, View } from 'react-native';
-import * as ExpoWidgetsModule from "../build"
+import * as ExpoWidgetsModule from '@bittingz/expo-widgets';
+
+function getData() {
+  if (Platform.OS === 'android') {
+    return 'Hello android!';
+  }
+  else {
+    var data = { message: 'Hello iOS!' };
+    return JSON.stringify(data);
+  }
+}
 
 export default function App() {
-  // ExpoWidgetsModule.setWidgetData({ message: 'Hello from app!' })
-  ExpoWidgetsModule.setWidgetData('Hello from app!')
+  const data = getData();
+  ExpoWidgetsModule.setWidgetData(data);
 
   return (
     <View style={styles.container}>
