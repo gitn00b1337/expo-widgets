@@ -2,11 +2,22 @@ import { ConfigPlugin } from "@expo/config-plugins";
 import { withIOSWidgets } from "./ios/withIOSWidgets";
 import { withAndroidWidgets } from "./android/withAndroidWidgets";
 
+export type AndroidWidgetProjectSettings = {
+
+    name: string;
+    /**
+     * Your widget resource name e.g. @xml/sample_widget_info
+     */
+    resourceName: string;
+}
+
 export type WithExpoAndroidWidgetsProps = {
     /**
      * The directory of your widget native code. 
      */
-    src: string
+    src: string;
+
+    widgets: AndroidWidgetProjectSettings[];    
 }
 
 export type WithExpoIOSWidgetsProps = {

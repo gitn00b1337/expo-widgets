@@ -8,6 +8,7 @@ import { withWidgetManifest } from "./withWidgetManifest";
 
 const DEFAULT_OPTIONS: WithExpoAndroidWidgetsProps = {
     src: 'widgets/android',
+    widgets: []
 }
 
 function getDefaultedOptions(options: WithExpoAndroidWidgetsProps) {
@@ -20,7 +21,7 @@ function getDefaultedOptions(options: WithExpoAndroidWidgetsProps) {
 export const withAndroidWidgets: ConfigPlugin<WithExpoAndroidWidgetsProps> = (config, userOptions) => {
     const options = getDefaultedOptions(userOptions);
 
-    config = withWidgetManifest(config);
+    config = withWidgetManifest(config, options);
     config = withWidgetProjectBuildGradle(config);
     config = withWidgetAppBuildGradle(config);
     config = withGsonGradle(config);

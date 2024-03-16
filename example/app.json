@@ -38,7 +38,13 @@
             ]
           },
           "android": {
-            "src": "./widgets/android"
+            "src": "./widgets/android",
+            "widgets": [
+              {
+                "name": "SampleWidget",
+                "reourceName": "@xml/sample_widget_info"
+              }
+            ]
           }
         }
       ]

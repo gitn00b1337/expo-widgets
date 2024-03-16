@@ -26,6 +26,7 @@ See the example project for more clarity. You can omit the android or ios folder
         },
         android: {
             src: "./src/my/path/to/android/widgets/folder",
+            resourceName: "@xml/my_widget_info.xml"
         }                      
     }
 ],
@@ -36,6 +37,7 @@ See the example project for more clarity. You can omit the android or ios folder
 5. If you have any swift files you need to use within Module.swift, simply add them to the moduleDependencies array in your app.config. This is particularly useful for data models between the module and widget.
 6. To share data between your app and widgets you can use a variety of methods, but the easiest way is to use UserPreferences. This plugin automatically handles it for you, so all you have to do is make sure to use a suiteName with the correct format. See the example project.
 7. If you want to use custom fonts in your widget, use my expo-native-fonts package. See the example project for usage. 
+8. For android, set resourceName to your file name in /res/xml/***_info.xml
 
 # Overriding xcode options
 
