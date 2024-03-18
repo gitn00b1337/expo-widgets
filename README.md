@@ -61,6 +61,10 @@ npm run prebuild
 npx expo run:ios
 ```
 
+## Troubleshooting Android
+
+If you use R in your widget kotlin file to get layouts, you may get an unresolved reference error for R. In this case, simply add "package your.appconfig.packageid.R", delete your android folder and rebuild.
+
 ## Need Custom Fonts?
 
 Give my [other expo module a try](https://github.com/gitn00b1337/expo-native-fonts). You'll need to put the fonts config before the widgets config.
