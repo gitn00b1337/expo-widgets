@@ -13,7 +13,8 @@ See the example project for more clarity. You can omit the android or ios folder
 1. Create a folder where you want to store your widget files.
 2. In your plugins array (app.config.{js/ts} add:
 
-```[
+```
+[
     "@bittingz/expo-widgets",
     {
         ios: {
