@@ -11,7 +11,7 @@ public class ExpoWidgetsModule: Module {
         
         Function("setWidgetData") { (data: String) -> Void in   
             let logger = Logger()        
-
+            do {
               // here we are using UserDefaults to send data to the widget
               // you MUST use a suite name of the format group.{your project bundle id}.expowidgets
               let widgetSuite = UserDefaults(suiteName: "group.expo.modules.widgets.example.expowidgets")
