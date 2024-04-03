@@ -8,7 +8,8 @@ import { withWidgetManifest } from "./withWidgetManifest";
 
 const DEFAULT_OPTIONS: WithExpoAndroidWidgetsProps = {
     src: 'widgets/android',
-    widgets: []
+    widgets: [],
+    distPlaceholder: ''
 }
 
 function getDefaultedOptions(options: WithExpoAndroidWidgetsProps) {

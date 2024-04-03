@@ -26,7 +26,7 @@ See the example project for more clarity. You can omit the android or ios folder
         },
         android: {
             src: "./src/my/path/to/android/widgets/folder",
-            resourceName: "@xml/my_widget_info.xml"
+            resourceName: "@xml/my_widget_info"
         }                      
     }
 ],
