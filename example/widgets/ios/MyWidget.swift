@@ -1,32 +1,44 @@
 import WidgetKit
 import SwiftUI
+import ExpoModulesCore
 
 func getEntry() -> SimpleEntry {
-    let widgetSuite = UserDefaults(suiteName: "group.expo.modules.widgets.example.expowidgets")
+    let widgetSuite = UserDefaults(suiteName: "group.expo.modules.widgets.example.expowidgets")!
+    let logger = Logger()
+  
+    let fallbackEntry = SimpleEntry(
+      date: Date(),
+      message: "Do you have a dev account set up correctly with signing permissions?"
+  )
 
-    if let data = widgetSuite?.data(forKey: "MyData") {
+    if let jsonData = widgetSuite.string(forKey: "MyData") {
         do {
+            logger.info("Data found in UserDefaults! Decoding...")
             let decoder = JSONDecoder()
-            let data = try decoder.decode(MyData.self, from: data)
+            
+          guard let unwrappedData = jsonData.data(using: .utf8) else {
+            return fallbackEntry
+          }
+          let data = try decoder.decode(MyData.self, from: unwrappedData)
 
             let entry = SimpleEntry(
                 date: Date(),
                 message: data.message
             )
+
+            logger.info("Data decoded!")
+            logger.info(data)
             
             return entry
         } catch (let error) {
-            //logger.error("An error occured decoding MyData: \(error.localizedDescription)")
+            logger.error("An error occured decoding MyData: \(error.localizedDescription)")
         }
     }
     else {
-        //logger.warn("No entry found MyData")
+        logger.warn("No entry found MyData")
     }
 
-    return SimpleEntry(
-        date: Date(),
-        message: "Do you have a dev account set up correctly with signing permissions?"
-    )
+    return fallbackEntry
 }
 
 struct Provider: TimelineProvider {

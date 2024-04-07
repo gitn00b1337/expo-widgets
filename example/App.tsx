@@ -12,8 +12,11 @@ function getData() {
 }
 
 export default function App() {
-  const data = getData();
-  ExpoWidgetsModule.setWidgetData(data);
+  if (Platform.OS === 'ios') {
+    console.log('Setting data')
+    const json = JSON.stringify({ message: 'Hello from app!' });
+    ExpoWidgetsModule.setWidgetData(json)
+  }
 
   return (
     <View style={styles.container}>
