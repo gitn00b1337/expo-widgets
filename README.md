@@ -60,7 +60,7 @@ The configOverrides properties are the xcodeproj values and must match case exac
 
 ```
 cd example
-npm run prebuild 
+npm run rebuild:ios 
 npx expo run:ios
 ```
 
