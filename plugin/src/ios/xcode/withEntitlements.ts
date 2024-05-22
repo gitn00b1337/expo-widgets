@@ -1,7 +1,7 @@
 import { ExportedConfigWithProps, IOSConfig, } from "@expo/config-plugins";
 import path from "path"
 import { getTargetName } from "../withWidgetXCode";
-import {IOSEntitlements, WithExpoIOSWidgetsProps} from "../..";
+import { IOSEntitlements, WithExpoIOSWidgetsProps } from "../..";
 import { ExpoConfig } from "@expo/config-types"
 import { Logging } from "../../utils/logger"
 import fsExtra from "fs-extra"

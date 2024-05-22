@@ -1,7 +1,7 @@
 import { ConfigPlugin } from "@expo/config-plugins";
 import { withIOSWidgets } from "./ios/withIOSWidgets";
 import { withAndroidWidgets } from "./android/withAndroidWidgets";
-import {PlistObject} from "plist";
+import { PlistObject } from "plist";
 
 export type AndroidWidgetProjectSettings = {
     /**
