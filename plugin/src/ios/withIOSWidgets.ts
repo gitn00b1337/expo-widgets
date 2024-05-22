@@ -4,7 +4,7 @@ import { withWidgetXCode } from "./withWidgetXCode"
 import { withConfig } from "./withConfig"
 import { withPodfile } from "./withPodfile"
 import { withModule } from "./withModule"
-import { withAppGroupEntitlements } from "./xcode/withAppGroupEntitlements"
+import { withEntitlements } from "./xcode/withEntitlements"
 import { withWidgetInfoPlist } from "./xcode/withWidgetInfoPlist"
 
 const defaultOptions = (): WithExpoIOSWidgetsProps => {
@@ -47,6 +47,7 @@ export const withIOSWidgets: ConfigPlugin<WithExpoIOSWidgetsProps> = (config, op
         xcode: {
             widgetBundleIdentifier: options.xcode?.widgetBundleIdentifier || xcode?.widgetBundleIdentifier,
             appGroupId: options.xcode?.appGroupId || xcode?.appGroupId,
+            entitlements: options.xcode?.entitlements || xcode?.entitlements,
             configOverrides: options.xcode?.configOverrides ||  xcode?.configOverrides,
         }
     }
@@ -56,7 +57,7 @@ export const withIOSWidgets: ConfigPlugin<WithExpoIOSWidgetsProps> = (config, op
     return withXcodeProject(config, config => {
         withModule(config, defaultedOptions)
         withWidgetXCode(config, defaultedOptions)
-        withAppGroupEntitlements(config, options)
+        withEntitlements(config, options)
         withWidgetInfoPlist(config, options)
         withPodfile(config, defaultedOptions)
 

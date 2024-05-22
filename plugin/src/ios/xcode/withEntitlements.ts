@@ -1,29 +1,24 @@
 import { ExportedConfigWithProps, IOSConfig, } from "@expo/config-plugins";
 import path from "path"
 import { getTargetName } from "../withWidgetXCode";
-import { WithExpoIOSWidgetsProps } from "../..";
+import {IOSEntitlements, WithExpoIOSWidgetsProps} from "../..";
 import { ExpoConfig } from "@expo/config-types"
 import { Logging } from "../../utils/logger"
 import fsExtra from "fs-extra"
 import * as fs from 'fs';
+import * as plist from 'plist';
 
-const createEntitlementXML = (appGroupId: string, mode: 'development' | 'production') => `<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>aps-environment</key>
-    <string>${mode}</string>
-	<key>com.apple.security.application-groups</key>
-	<array>
-		<string>${appGroupId}</string>
-	</array>
-</dict>
-</plist>`
+const createEntitlementXML = (appGroupId: string, mode: 'development' | 'production', entitlements?: IOSEntitlements) => {
+    const finalEntitlements = {
+        ...entitlements || {},
+        'aps-environment': mode,
+        'com.apple.security.application-groups': appGroupId,
+    }
+    return plist.build(finalEntitlements)
+}
 
-export const withAppGroupEntitlements = (config: ExportedConfigWithProps<unknown>, options: WithExpoIOSWidgetsProps) => {
+export const withEntitlements = (config: ExportedConfigWithProps<unknown>, options: WithExpoIOSWidgetsProps) => {
     const {
-        projectName,
-        projectRoot,
         platformProjectRoot,
     } = config.modRequest
 
@@ -32,8 +27,6 @@ export const withAppGroupEntitlements = (config: ExportedConfigWithProps<unknown
     const appGroupId = getAppGroupId(config, options)
     Logging.logger.debug(`AppGroupId:: ${appGroupId}`)
 
-    const entitlementsFileName = `${widgetProjectName}.entitlements`
-    const mainProjectEntitlementFile = path.join(platformProjectRoot, entitlementsFileName)
     const widgetProjectPath = path.join(platformProjectRoot, widgetProjectName)
     const widgetProjectEntitlementFile = path.join(widgetProjectPath, `${widgetProjectName}.entitlements`)
 
@@ -41,7 +34,7 @@ export const withAppGroupEntitlements = (config: ExportedConfigWithProps<unknown
 
     fs.mkdirSync(widgetProjectPath, { recursive: true })
 
-    fsExtra.writeFileSync(widgetProjectEntitlementFile, createEntitlementXML(appGroupId, options.mode || 'production'))
+    fsExtra.writeFileSync(widgetProjectEntitlementFile, createEntitlementXML(appGroupId, options.mode || 'production', options.xcode?.entitlements))
 
     return config
 }
