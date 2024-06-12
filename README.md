@@ -24,6 +24,9 @@ See the example project for more clarity. You can omit the android or ios folder
             moduleDependencies: [],
             useLiveActivities: false,
             frequentUpdates: false,
+            entitlements: {
+                "any xcode entitlement the widget needs": "entitlement value"
+            }
         },
         android: {
             src: "./src/my/path/to/android/widgets/folder",
