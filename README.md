@@ -63,8 +63,11 @@ The configOverrides properties are the xcodeproj values and must match case exac
 
 ```
 cd example
-npm run prebuild --clean
-npx expo run:ios
+npm run prebuild:ios
+npm run ios
+OR
+npm run prebuild:android
+npm run android
 ```
 
 ## Troubleshooting Android
