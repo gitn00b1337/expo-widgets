@@ -3,7 +3,7 @@ import { WithExpoIOSWidgetsProps } from ".."
 import { getBundleIdentifier, getTargetName } from "./withWidgetXCode"
 import { Logging } from "../utils/logger"
 import { ExpoConfig } from "@expo/config-types"
-import { getPushNotificationsMode } from "./xcode/withAppGroupEntitlements"
+import { getPushNotificationsMode } from "./xcode/withEntitlements"
 
 const APP_GROUP_KEY = "com.apple.security.application-groups"
 

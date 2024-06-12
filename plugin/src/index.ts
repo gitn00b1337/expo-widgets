@@ -1,6 +1,7 @@
 import { ConfigPlugin } from "@expo/config-plugins";
 import { withIOSWidgets } from "./ios/withIOSWidgets";
 import { withAndroidWidgets } from "./android/withAndroidWidgets";
+import { PlistObject } from "plist";
 
 export type AndroidWidgetProjectSettings = {
     /**
@@ -30,6 +31,8 @@ export type WithExpoAndroidWidgetsProps = {
      */
     distPlaceholder: string;
 }
+
+export type IOSEntitlements = PlistObject;
 
 export type WithExpoIOSWidgetsProps = {
     /**
@@ -70,6 +73,10 @@ export type WithExpoIOSWidgetsProps = {
          * Optional appGroupId override
          */
         appGroupId?: string;
+        /**
+         * Optional entitlements
+         */
+        entitlements?: IOSEntitlements;
         /**
          * Within xcode there is a configuration block. You can customise the config 
          * here if you have specific needs
