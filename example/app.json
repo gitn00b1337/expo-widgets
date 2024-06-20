@@ -42,7 +42,7 @@
             "widgets": [
               {
                 "name": "SampleWidget",
-                "reourceName": "@xml/sample_widget_info"
+                "resourceName": "@xml/sample_widget_info"
               }
             ]
           }
