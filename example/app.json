@@ -28,7 +28,7 @@
     },
     "plugins": [
       [
-        "../app.plugin.js",
+        "@bittingz/expo-widgets",
         {
           "ios": {
             "src": "./widgets/ios",

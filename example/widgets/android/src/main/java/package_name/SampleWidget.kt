@@ -5,6 +5,11 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.widget.RemoteViews
 import android.content.SharedPreferences
+import java.util.logging.Logger
+import org.json.JSONException
+import org.json.JSONObject
+
+val Log: Logger = Logger.getLogger(SampleWidget::class.java.name)
 
 /**
  * Implementation of App Widget functionality.
@@ -35,11 +40,20 @@ internal fun updateAppWidget(
     appWidgetManager: AppWidgetManager,
     appWidgetId: Int
 ) {
-    val data = context.getSharedPreferences(context.packageName + ".widgetdata", Context.MODE_PRIVATE).getString("widgetdata", "{}")
-   
-    val views = RemoteViews(context.packageName, R.layout.sample_widget)
-    views.setTextViewText(R.id.appwidget_text, data)
+    try {
+        val jsonData = context
+        .getSharedPreferences("${context.packageName}.widgetdata", Context.MODE_PRIVATE)
+        .getString("widgetdata", "{}")
 
-    // Instruct the widget manager to update the widget
-    appWidgetManager.updateAppWidget(appWidgetId, views)
+        val data = JSONObject(jsonData)
+    
+        val views = RemoteViews(context.packageName, R.layout.sample_widget)
+        views.setTextViewText(R.id.appwidget_text, data.getString("message"))
+
+        // Instruct the widget manager to update the widget
+        appWidgetManager.updateAppWidget(appWidgetId, views)
+    } catch (e: JSONException) {
+        Log.warning("An error occurred parsing widget json!")
+        Log.warning(e.message)
+    }
 }
