@@ -15,13 +15,13 @@ public class ExpoWidgetsModule: Module {
         Name("ExpoWidgets")
         
         Function("setWidgetData") { (data: String) -> Void in   
-            let logger = Logger()        
+            let logger = Logger(logHandlers: [MyLogHandler()])     
             // here we are using UserDefaults to send data to the widget
             // you MUST use a suite name of the format group.{your project bundle id}.expowidgets
             let widgetSuite = UserDefaults(suiteName: "group.expo.modules.widgets.example.expowidgets")
             widgetSuite?.set(data, forKey: "MyData")
-            logger.info("Encoded data saved to suite group.expo.modules.widgets.example.expowidgets, key MyData")
-            logger.info(data)
+            logger.log(message: "Encoded data saved to suite group.expo.modules.widgets.example.expowidgets, key MyData")
+            logger.log(message: data)
 
             // this is optional, but while your app is open and in focus
             // messages sent to the widget do not count towards its timeline limitations

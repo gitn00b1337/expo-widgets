@@ -2,9 +2,10 @@ import WidgetKit
 import SwiftUI
 import ExpoModulesCore
 
+let logger = Logger(logHandlers: [MyLogHandler()])
+
 func getEntry() -> SimpleEntry {
     let widgetSuite = UserDefaults(suiteName: "group.expo.modules.widgets.example.expowidgets")!
-    let logger = Logger()
   
     let fallbackEntry = SimpleEntry(
       date: Date(),
@@ -13,29 +14,29 @@ func getEntry() -> SimpleEntry {
 
     if let jsonData = widgetSuite.string(forKey: "MyData") {
         do {
-            logger.info("Data found in UserDefaults! Decoding...")
+            logger.log(message: "Entry found in suite for MyData key. Attempting to parse..")
             let decoder = JSONDecoder()
             
-          guard let unwrappedData = jsonData.data(using: .utf8) else {
-            return fallbackEntry
-          }
-          let data = try decoder.decode(MyData.self, from: unwrappedData)
+            guard let unwrappedData = jsonData.data(using: .utf8) else {
+                return fallbackEntry
+            }
+            
+            let data = try decoder.decode(MyData.self, from: unwrappedData)
 
             let entry = SimpleEntry(
                 date: Date(),
                 message: data.message
             )
-
-            logger.info("Data decoded!")
-            logger.info(data)
             
             return entry
         } catch (let error) {
-            logger.error("An error occured decoding MyData: \(error.localizedDescription)")
+            // log using your logger
+          logger.log(message: "Error parsing widget data: \(error.localizedDescription)")
         }
     }
     else {
-        logger.warn("No entry found MyData")
+        // no entry found, log using your logger
+      logger.log(message: "No entry found in widget suite")
     }
 
     return fallbackEntry

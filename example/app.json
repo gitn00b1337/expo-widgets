@@ -28,13 +28,14 @@
     },
     "plugins": [
       [
-        "@bittingz/expo-widgets",
+        "../app.plugin.js",
         {
           "ios": {
             "src": "./widgets/ios",
             "mode": "development",
             "moduleDependencies": [
-              "MyData.swift"
+              "MyData.swift",
+              "LogHandler.swift"
             ]
           },
           "android": {
