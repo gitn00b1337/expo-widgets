@@ -83,6 +83,14 @@ If you use R in your widget kotlin file to get layouts, you may get an unresolve
 
 Give my [other expo module a try](https://github.com/gitn00b1337/expo-native-fonts). You'll need to put the fonts config before the widgets config.
 
+## Need Development?
+
+If you need widgets designed & developed, reach out for more details. 
+
+## Versioning
+
+Use v1 packages for expo 49, or v2 for expo 51+. 
+
 # Thanks!
 
 A huge thanks to [gashimo](https://github.com/gaishimo/eas-widget-example) for a great baseline to start from. 
