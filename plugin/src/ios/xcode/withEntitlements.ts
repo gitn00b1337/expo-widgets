@@ -12,7 +12,7 @@ const createEntitlementXML = (appGroupId: string, mode: 'development' | 'product
     const finalEntitlements = {
         ...entitlements || {},
         'aps-environment': mode,
-        'com.apple.security.application-groups': appGroupId,
+        'com.apple.security.application-groups': [ appGroupId ],
     }
     return plist.build(finalEntitlements)
 }
