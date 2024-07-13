@@ -2,11 +2,13 @@
 
 An expo module that allows you to make native widgets in iOS and android.
 
-# Installation
+## Installation
+
+Use v1 packages for expo 49, or v2 for expo 51+. 
 
 ```npx expo install @bittingz/expo-widgets```
 
-# Setup
+## Setup
 
 See the example project for more clarity. You can omit the android or ios folders and setup if you only wish to support one platform.
 
@@ -50,7 +52,7 @@ See the example project for more clarity. You can omit the android or ios folder
 8. For android, set resourceName to your file name in /res/xml/***_info.xml
 9. For android apps which require multiple distributions with different package names you can use distPlaceholder which will replace all instances of the provided placeholder in widget source files with your app.config.(json/ts/js). So if your source files include "package com.company.app" and "import com.company.app" and you have two distributions (com.company.app for prod and dev.company.app for dev) then setting distPlaceholder to com.company.app will replace all package and import references to the correct distribution each build. You can omit this field if it's not relevant to you. iOS requires no configuration for multiple distribution apps.
 
-# Overriding xcode options
+## Overriding xcode options
 
 If you need to override xcode options (such as handling a swift version mismatch) you can add the following:
 
@@ -87,10 +89,6 @@ Give my [other expo module a try](https://github.com/gitn00b1337/expo-native-fon
 
 If you need widgets designed & developed, reach out for more details. 
 
-## Versioning
-
-Use v1 packages for expo 49, or v2 for expo 51+. 
-
-# Thanks!
+## Thanks!
 
 A huge thanks to [gashimo](https://github.com/gaishimo/eas-widget-example) for a great baseline to start from. 
