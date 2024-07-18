@@ -1,6 +1,10 @@
 {
   "name": "@bittingz/expo-widgets",
+<<<<<<< HEAD
   "version": "2.0.0",
+=======
+  "version": "1.1.0-next",
+>>>>>>> 19210d6 (package upgrading to latest)
   "description": "An expo module that allows you to make native widgets in iOS and android",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -12,7 +16,6 @@
     "test": "expo-module test",
     "prepare": "expo-module prepare",
     "prepublishOnly": "expo-module prepublishOnly",
-    "expo-module": "expo-module",
     "open:ios": "open -a \"Xcode\" example/ios",
     "open:android": "open -a \"Android Studio\" example/android",
     "plugin:build": "expo-module build plugin",
@@ -32,16 +35,14 @@
   "license": "MIT",
   "homepage": "https://github.com/gitn00b1337/expo-widgets",
   "devDependencies": {
-    "@babel/core": "^7.20.0",
+    "@babel/core": "^7.24.0",
     "@tsconfig/node14": "^14.1.0",
     "@types/fs-extra": "^11.0.1",
     "@types/node": "^20.4.2",
     "@types/plist": "^3.0.5",
-    "@types/react": "^18.0.25",
-    "@types/react-native": "^0.72.2",
+    "@types/react": "~18.2.79",
     "copyfiles": "^2.4.1",
-    "expo-module-scripts": "^3.4.0",
-    "expo-modules-core": "~1.5.12",
+    "expo-module-scripts": "^3.5.2",
     "fs-extra": "^11.1.1",
     "path": "^0.12.7"
   },
@@ -49,9 +50,6 @@
     "expo": "*"
   },
   "dependencies": {
-    "@expo/config-plugins": "~7.2.2",
-    "expo": "*",
-    "expo-modules": "^0.0.0",
     "plist": "^3.1.0"
   }
 }
