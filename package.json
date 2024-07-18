@@ -1,6 +1,6 @@
 {
   "name": "@bittingz/expo-widgets",
-  "version": "2.0.0-next",
+  "version": "2.1.0",
   "description": "An expo module that allows you to make native widgets in iOS and android",
   "main": "build/index.js",
   "types": "build/index.d.ts",
