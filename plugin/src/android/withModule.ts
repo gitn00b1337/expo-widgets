@@ -16,7 +16,8 @@ export const withModule: ConfigPlugin<WithExpoAndroidWidgetsProps> = (
 
             const projectRoot = modRequest.projectRoot;            
             const platformRoot = modRequest.platformProjectRoot;
-            const widgetFolderPath = path.join(modRequest.projectRoot, options.src);
+            const widgetFolderPath = path.join(modRequest.projectRoot, options.src, 'src/main/java/package_name');
+            const androidFolder = path.join(__dirname, '../../../android/src/main/java/expo/modules/widgets/')
             const packageName = AndroidConfig.Package.getPackage(config);
 
             if (!packageName) {
@@ -24,11 +25,8 @@ export const withModule: ConfigPlugin<WithExpoAndroidWidgetsProps> = (
             }
 
             const packageNameAsPath = packageName?.replace(/\./g, "/");
-            const moduleSourcePath = path.join(widgetFolderPath, 'src/main/java/package_name/ExpoWidgetsModule.kt');
-            const moduleDestinationPath = path.join(
-                __dirname, 
-                '../../../android/src/main/java/expo/modules/widgets/ExpoWidgetsModule.kt'
-            );
+            const moduleSourcePath = path.join(widgetFolderPath, 'Module.kt');
+            const moduleDestinationPath = path.join(androidFolder, 'ExpoWidgetsModule.kt');
 
             if (!fs.existsSync(moduleSourcePath)) {
                 Logging.logger.debug('No module file found. Adding template...');
@@ -37,6 +35,15 @@ export const withModule: ConfigPlugin<WithExpoAndroidWidgetsProps> = (
             }
             else {
                 fs.copyFileSync(moduleSourcePath, moduleDestinationPath);
+            }
+
+            if (options.moduleDependencies) {
+                for (const dep of options.moduleDependencies) {
+                    const filePath = path.join(widgetFolderPath, dep)
+                    const destination = path.join(androidFolder, path.basename(dep))
+                    Logging.logger.debug(`Copying ${filePath} to ${destination}`)
+                    fs.copyFileSync(filePath, destination)
+                }
             }
 
             return newConfig;
