@@ -54,13 +54,15 @@ See the example project for more clarity. You can omit the android or ios folder
 
 ## Overriding xcode options
 
-If you need to override xcode options (such as handling a swift version mismatch) you can add the following:
+You can override xcode options in app.json (all props are optional):
 
 ```
 xcode: {
+    appExtAPI: true, // sets APP_EXTENSION_API_ONLY in the podfile
     configOverrides: {
-        SWIFT_VERSION: '5.0',
-    },                        
+        // key value pairs e.g. SWIFT_VERSION: '5.0',
+    },
+    entitlements: {}, // key value pairs
 },
 ```
 
