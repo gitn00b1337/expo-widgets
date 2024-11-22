@@ -90,6 +90,7 @@ class WidgetProjectFileCollection {
       entitlements: [],
       plist: [],
       xcassets: [],
+      intentdefinition: [],
     };
   }
 
