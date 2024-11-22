@@ -18,7 +18,6 @@ const defaultOptions = (): WithExpoIOSWidgetsProps => {
         mode: 'production',
         widgetExtPlugins: [],
         xcode: {
-
         }
     }
 }

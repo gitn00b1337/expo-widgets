@@ -82,6 +82,10 @@ export type WithExpoIOSWidgetsProps = {
          * here if you have specific needs
          */
         configOverrides?: { [ attributeName: string ]: string };
+        /**
+         * Controls the podfile APP_EXTENSION_API_ONLY setting.
+         */
+        appExtAPI?: boolean;
     }
     /**
      * A collection of relative file paths to files your module file needs (like shared models)
