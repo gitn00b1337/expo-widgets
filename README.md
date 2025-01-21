@@ -57,13 +57,19 @@ See the example project for more clarity. You can omit the android or ios folder
 You can override xcode options in app.json (all props are optional):
 
 ```
-xcode: {
-    appExtAPI: true, // sets APP_EXTENSION_API_ONLY in the podfile
-    configOverrides: {
-        // key value pairs e.g. SWIFT_VERSION: '5.0',
-    },
-    entitlements: {}, // key value pairs
-},
+"@bittingz/expo-widgets",
+{
+    "ios": {
+        ...
+        xcode: {
+            appExtAPI: true, // sets APP_EXTENSION_API_ONLY in the podfile
+            configOverrides: {
+                // key value pairs e.g. SWIFT_VERSION: '5.0',
+            },
+            entitlements: {}, // key value pairs
+        },
+    }
+}
 ```
 
 The configOverrides properties are the xcodeproj values and must match case exactly.
