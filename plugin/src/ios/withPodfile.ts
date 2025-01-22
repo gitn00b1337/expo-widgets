@@ -3,8 +3,8 @@ import { ExportedConfigWithProps, XcodeProject, } from "expo/config-plugins"
 import * as fs from "fs"
 import * as path from "path"
 import { Logging } from "../utils/logger"
-import { getTargetName } from "./withWidgetXCode"
 import { WithExpoIOSWidgetsProps } from ".."
+import { getTargetName } from "./xcode/target"
 
 export const withPodfile = (config: ExportedConfigWithProps<XcodeProject>, options: WithExpoIOSWidgetsProps) => {
   const targetName = `${getTargetName(config, options)}`

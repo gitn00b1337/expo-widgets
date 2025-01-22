@@ -1,12 +1,12 @@
 import { ExportedConfigWithProps, IOSConfig, } from "@expo/config-plugins";
 import path from "path"
-import { getTargetName } from "../withWidgetXCode";
 import { IOSEntitlements, WithExpoIOSWidgetsProps } from "../..";
 import { ExpoConfig } from "@expo/config-types"
 import { Logging } from "../../utils/logger"
 import fsExtra from "fs-extra"
 import * as fs from 'fs';
 import * as plist from 'plist';
+import { getTargetName } from "./target";
 
 const createEntitlementXML = (appGroupId: string, mode: 'development' | 'production', entitlements?: IOSEntitlements) => {
     const finalEntitlements = {

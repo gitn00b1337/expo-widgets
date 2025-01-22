@@ -6,69 +6,9 @@ import { ExpoConfig } from "@expo/config-types"
 import { WithExpoIOSWidgetsProps } from ".."
 import { addWidgetExtensionTarget } from "./xcode/addWidgetExtensionTarget"
 import { Logging } from "../utils/logger"
-
-export const getDefaultBuildConfigurationSettings = (options: WithExpoIOSWidgetsProps, config: ExpoConfig) => {
-  const targetName = getTargetName(config, options)
-  const deploymentTarget = options.deploymentTarget
-  const developmentTeamId = options.devTeamId
-  const bundleIdentifier = getBundleIdentifier(config, options)
-  const currentProjectVersion = config.ios?.buildNumber || '1'
-  const marketingVersion = config.version || '1.0'
-
-  return {
-    ALWAYS_SEARCH_USER_PATHS: 'NO',
-    ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'YES',
-    ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: "AccentColor",
-    ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME: "WidgetBackground",
-    CLANG_ANALYZER_NONNULL: "YES",
-    CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION: "YES_AGGRESSIVE",
-    //CLANG_CXX_LANGUAGE_STANDARD: '"gnu++20"',
-    CLANG_ENABLE_OBJC_WEAK: "YES",
-    CLANG_WARN_DOCUMENTATION_COMMENTS: "YES",
-    //CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER: "YES",
-    CLANG_WARN_UNGUARDED_AVAILABILITY: "YES_AGGRESSIVE",
-    CODE_SIGN_STYLE: "Automatic",
-    CODE_SIGN_ENTITLEMENTS: `${targetName}/${targetName}.entitlements`,
-    CURRENT_PROJECT_VERSION: `${currentProjectVersion}`,
-    DEBUG_INFORMATION_FORMAT: "dwarf",
-    DEVELOPMENT_TEAM: `${developmentTeamId}`,
-    GCC_C_LANGUAGE_STANDARD: "gnu11",
-    GENERATE_INFOPLIST_FILE: "YES",
-    INFOPLIST_FILE: `${targetName}/Info.plist`,
-    INFOPLIST_KEY_CFBundleDisplayName: targetName,
-    INFOPLIST_KEY_NSHumanReadableCopyright: '""',
-    IPHONEOS_DEPLOYMENT_TARGET: `${deploymentTarget}`,
-    LD_RUNPATH_SEARCH_PATHS:
-      '"$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks"',
-    MARKETING_VERSION: `${marketingVersion}`,
-    MTL_ENABLE_DEBUG_INFO: "INCLUDE_SOURCE",
-    MTL_FAST_MATH: "YES",
-    PRODUCT_NAME: '"$(TARGET_NAME)"',
-    PRODUCT_BUNDLE_IDENTIFIER: `${bundleIdentifier}`,
-    SKIP_INSTALL: "NO",
-    SWIFT_ACTIVE_COMPILATION_CONDITIONS: "DEBUG",
-    SWIFT_EMIT_LOC_STRINGS: "YES",
-    SWIFT_OPTIMIZATION_LEVEL: "-Onone",
-    SWIFT_VERSION:  "5.4",
-    TARGETED_DEVICE_FAMILY: '"1,2"',
-    ...(options.xcode?.configOverrides || {}),
-  }
-}
-
-/**
- * Gets the target name either via a sanitised config.name + Widgets or if provided options.xcode.targetName
- * @param config The expo config
- * @param options The ios config options
- * @returns The target name
- */
-export const getTargetName = (config: ExpoConfig, options: WithExpoIOSWidgetsProps) => {
-  if (options.targetName) {
-    return IOSConfig.XcodeUtils.sanitizedName(options.targetName)
-  }
-
-  const cleanName = IOSConfig.XcodeUtils.sanitizedName(config.name)
-  return `${cleanName}WidgetExtension`;
-}
+import { WidgetProjectFileCollection } from "./widgetProjectFileCollection"
+import { addFrameworksToWidgetProject } from "./xcode/framework"
+import { getTargetName } from "./xcode/target"
 
 export const getBundleIdentifier = (config: ExpoConfig, options: WithExpoIOSWidgetsProps) => {
   if (options.xcode?.widgetBundleIdentifier) {
@@ -77,65 +17,6 @@ export const getBundleIdentifier = (config: ExpoConfig, options: WithExpoIOSWidg
 
   const targetName = getTargetName(config, options);
   return `${config.ios?.bundleIdentifier}.${targetName}`;
-}
-
-type WidgetProjectFiles = { [key: string]: string[] }
-
-class WidgetProjectFileCollection {
-  private readonly _files: WidgetProjectFiles
-
-  constructor() {
-    this._files = {
-      swift: [],
-      entitlements: [],
-      plist: [],
-      xcassets: [],
-      intentdefinition: [],
-    };
-  }
-
-  static fromFiles(files: string[]) {
-    const collection = new WidgetProjectFileCollection();
-    collection.addFiles(files);
-
-    return collection;
-  }
-
-  addFiles(files: string[]) {
-    for (const file of files) {
-      this.addFile(file);
-    }
-  }
-
-  addFile(file: string) {
-    const extension = path.extname(file).substring(1)
-
-    if (file === "Module.swift") {
-      return;
-    }
-    else if (this._files.hasOwnProperty(extension)) {
-      Logging.logger.debug(`Adding file ${file}...`)
-      Logging.logger.debug(`Extension: ${extension}`)
-
-      this._files[extension].push(file)
-    }
-  }
-
-  getFiltered() {
-    return this._files
-  }
-
-  getBundled(includeProjectLevelFiles: boolean = false) {
-    return Object.keys(this._files)
-      .map(key => { return { files: this._files[key], key } })
-      .reduce<string[]>((arr, { key, files }) => {
-        if (!includeProjectLevelFiles && key === 'entitlements') {
-          return arr;
-        }
-
-        return [...arr, ...files]
-      }, []);
-  }
 }
 
 const copyFilesToWidgetProject = (widgetFolderPath: string, targetPath: string) => {
@@ -261,10 +142,10 @@ const addFilesToWidgetProject = (
     Logging.logger.debug(`Adding ${filesByType.xcassets.length} asset files...`)
 
     Logging.logger.debug(`Creating PBX group for the widget project:: ${targetName}`)
-    // for each level of files in the directory add a new group, and then add this group to the parent directory
-
     Logging.logger.debug(`Adding ${allFiles.length} files...`)
 
+    // for each level of files in the directory add a new group, 
+    // and then add this group to the parent directory
     const groupTarget = isBaseDirectory ? targetName : folderName
     const groupPath = isBaseDirectory ? targetName : relativePath
 
@@ -368,27 +249,8 @@ const addFilesToWidgetProject = (
     Logging.logger.debug(projectTarget)
   }
 
-  //const widgetsTarget = project.addTarget(targetName, 'application', '')
-  //const extensionTarget = project.addTarget(`${targetName}Extension`, 'app_extension', '')
   Logging.logger.debug(`Adding extension target`)
   const extensionTarget = addWidgetExtensionTarget(project, expoConfig, options, `${targetName}`)
-
-  const getPBXTargetByName = (project: XcodeProject, name: string) => {
-    var targetSection = project.pbxNativeTargetSection()
-
-    for (const uuid in targetSection) {
-        const target = targetSection[uuid]
-        
-        if (target.name === name) {
-            return {
-                uuid,
-                target,
-            }
-        }    
-    }
-
-    return { target: null, uuid: null }
-}
 
   Logging.logger.debug(`Adding project target ${projectTarget?.uuid} to extension target ${extensionTarget.uuid}`)
 
@@ -431,50 +293,3 @@ const addFilesToWidgetProject = (
     extensionTarget,
   }
 }
-
-
-const addFrameworksToWidgetProject = (project: XcodeProject, target: { uuid: string }) => {
-  const frameworks = ['WidgetKit.framework', 'SwiftUI.framework']
-
-  for (const framework of frameworks) {
-    project.addFramework(framework, {
-      target: target.uuid,
-      link: true,
-    })
-  }
-
-  project.addBuildPhase(
-    frameworks,
-    'PBXFrameworksBuildPhase',
-    'Frameworks',
-    target.uuid
-  )
-}
-
-// export const getXCodeBuildConfiguration = (project: XcodeProject, config: ExpoConfig, options: WithExpoIOSWidgetsProps, targetName: string) => {
-//   const settings = getDefaultBuildConfigurationSettings({
-//     targetName: getTargetName(config, options),
-//     deploymentTarget: options.deploymentTarget,
-//     developmentTeamId: options.devTeamId,
-//     bundleIdentifier: getBundleIdentifier(config, options),
-//     currentProjectVersion: config.ios?.buildNumber || '1',
-//     marketingVersion: config.version || '1.0',
-//   });
-
-//   return [
-//     {
-//       name: "Debug",
-//       isa: "XCBuildConfiguration",
-//       buildSettings: {
-//         ...settings,
-//       } 
-//     },
-//     {
-//       name: "Release",
-//       isa: "XCBuildConfiguration",
-//       buildSettings: {
-//         ...settings,
-//       }
-//     }
-//   ]
-// }

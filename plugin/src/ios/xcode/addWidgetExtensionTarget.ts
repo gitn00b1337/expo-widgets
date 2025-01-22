@@ -1,10 +1,10 @@
 import { XcodeProject } from "@expo/config-plugins";
-import path from "path"
-import { getBundleIdentifier, getDefaultBuildConfigurationSettings, getTargetName } from "../withWidgetXCode";
 import { WithExpoIOSWidgetsProps } from "../..";
 import { ExpoConfig } from "@expo/config-types"
 import * as util from "util"
 import { Logging } from "../../utils/logger"
+import { getProductTypeForTargetType } from "./productType";
+import { getDefaultBuildConfigurationSettings } from "./buildConfiguration";
 
 export const addWidgetExtensionTarget = (project: XcodeProject, config: ExpoConfig, options: WithExpoIOSWidgetsProps, name: string, bundleId?: string) => {
     const targetType = 'app_extension'
@@ -26,7 +26,7 @@ export const addWidgetExtensionTarget = (project: XcodeProject, config: ExpoConf
     }
 
     // Check type against list of allowed target types
-    if (!productTypeForTargetType(targetType)) {
+    if (!getProductTypeForTargetType(targetType)) {
         throw new Error("Target type invalid: " + targetType);
     }
 
@@ -64,7 +64,7 @@ export const addWidgetExtensionTarget = (project: XcodeProject, config: ExpoConf
 
     // Product: Create
     var productName = targetName,
-        productType = productTypeForTargetType(targetType),
+        productType = getProductTypeForTargetType(targetType),
         productFileType = fileTypeForProductType(productType);
         
     Logging.logger.debug(`Adding product file`)
@@ -93,7 +93,7 @@ export const addWidgetExtensionTarget = (project: XcodeProject, config: ExpoConf
                 name: targetName,
                 productName: '"' + targetName + '"',
                 productReference: productFile.fileRef,
-                productType: '"' + productTypeForTargetType(targetType) + '"',
+                productType: '"' + getProductTypeForTargetType(targetType) + '"',
                 buildConfigurationList: buildConfigurations.uuid,
                 buildPhases: [],
                 buildRules: [],
@@ -129,24 +129,7 @@ export const addWidgetExtensionTarget = (project: XcodeProject, config: ExpoConf
 
 };
 
-const productTypeForTargetType = (targetType: string) => {
-    const PRODUCTTYPE_BY_TARGETTYPE: { [key: string]: string } = {
-            application: 'com.apple.product-type.application',
-            app_extension: 'com.apple.product-type.app-extension',
-            bundle: 'com.apple.product-type.bundle',
-            command_line_tool: 'com.apple.product-type.tool',
-            dynamic_library: 'com.apple.product-type.library.dynamic',
-            framework: 'com.apple.product-type.framework',
-            static_library: 'com.apple.product-type.library.static',
-            unit_test_bundle: 'com.apple.product-type.bundle.unit-test',
-            watch_app: 'com.apple.product-type.application.watchapp',
-            watch2_app: 'com.apple.product-type.application.watchapp2',
-            watch_extension: 'com.apple.product-type.watchkit-extension',
-            watch2_extension: 'com.apple.product-type.watchkit2-extension'
-        };
 
-    return PRODUCTTYPE_BY_TARGETTYPE[targetType]
-}
 
 const fileTypeForProductType = (productType: string) => {
 

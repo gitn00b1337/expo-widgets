@@ -35,10 +35,6 @@ export const withModule: ConfigPlugin<WithExpoAndroidWidgetsProps> = (
             if (!fs.existsSync(moduleSourcePath)) {
                 Logging.logger.debug('No module file found. Adding template...');
                 const contents = getTemplate(packageName);
-                // fs.writeFileSync(moduleDestinationPath, contents);
-            }
-            else {
-                // fs.writeFileSync()
             }
 
             return newConfig;

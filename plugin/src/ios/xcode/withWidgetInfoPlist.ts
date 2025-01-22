@@ -5,8 +5,8 @@
 import { ExportedConfigWithProps } from "@expo/config-plugins";
 import { WithExpoIOSWidgetsProps } from "../..";
 import path from "path";
-import { getTargetName } from "../withWidgetXCode";
 import fsExtra from "fs-extra"
+import { getTargetName } from "./target";
 
 type PlistKeyValue = {
     key: string
