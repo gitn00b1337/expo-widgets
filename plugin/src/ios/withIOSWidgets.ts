@@ -18,6 +18,7 @@ const defaultOptions = (): WithExpoIOSWidgetsProps => {
         mode: 'production',
         widgetExtPlugins: [],
         xcode: {
+            appExtAPI: false,
         }
     }
 }
@@ -48,6 +49,7 @@ export const withIOSWidgets: ConfigPlugin<WithExpoIOSWidgetsProps> = (config, op
             appGroupId: options.xcode?.appGroupId || xcode?.appGroupId,
             entitlements: options.xcode?.entitlements || xcode?.entitlements,
             configOverrides: options.xcode?.configOverrides ||  xcode?.configOverrides,
+            appExtAPI: options.xcode?.appExtAPI || xcode?.appExtAPI,
         }
     }
 
