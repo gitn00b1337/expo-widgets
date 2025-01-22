@@ -193,12 +193,13 @@ export const withWidgetXCode = (
 
     const targetName = getTargetName(props, options)
     const targetPath = path.join(platformProjectRoot, targetName)
+    const iosProjectPath = IOSConfig.Paths.getSourceRoot(projectRoot)
 
     // copy widget files over
     copyFilesToWidgetProject(widgetFolderPath, targetPath)
     copyModuleDependencies(options, widgetFolderPath)
 
-    addFilesToWidgetProject(project, { widgetFolderPath, targetUuid, targetName, projectName: projectName || 'MyProject', expoConfig: props, options });
+    addFilesToWidgetProject(project, { widgetFolderPath, iosProjectPath, targetUuid, targetName, projectName: projectName || 'MyProject', expoConfig: props, options });
 
     return props
   } catch (e) {
@@ -211,6 +212,7 @@ const addFilesToWidgetProject = (
   project: XcodeProject,
   {
     widgetFolderPath,
+    iosProjectPath,
     targetUuid,
     targetName,
     projectName,
@@ -219,6 +221,7 @@ const addFilesToWidgetProject = (
   }: {
     targetUuid: string
     widgetFolderPath: string
+    iosProjectPath: string
     projectName: string
     targetName: string
     expoConfig: ExpoConfig
@@ -275,6 +278,22 @@ const addFilesToWidgetProject = (
       '"<group>"'
     )
 
+    const shouldAddResourcesBuildPhase = () => {
+      const googleServicePlistPath = path.join(iosProjectPath, 'GoogleService-Info.plist');
+      return fs.existsSync(googleServicePlistPath) || filesByType.xcassets?.length > 0;
+    }
+
+    const getResourceFiles = () => {
+      const resources = [...(filesByType.xcassets || [])];
+      const googleServicePlistPath = path.join(iosProjectPath, 'GoogleService-Info.plist');
+      
+      if (fs.existsSync(googleServicePlistPath)) {
+        resources.push(googleServicePlistPath);
+      }
+      
+      return resources;
+    }
+
     if (isBaseDirectory) {
       // add to top project (main) group
       const projectInfo = project.getFirstProject()
@@ -305,19 +324,18 @@ const addFilesToWidgetProject = (
         ''
       )
 
-      if (filesByType.xcassets?.length) {
-        Logging.logger.debug(`Adding PBXResourcesBuildPhase to target ${widgetTargetUuid}`)
+      if (shouldAddResourcesBuildPhase()) {
+        Logging.logger.debug(`Adding PBXResourcesBuildPhase to target ${widgetTargetUuid}`);
         project.addBuildPhase(
-          filesByType.xcassets,
+          getResourceFiles(),
           "PBXResourcesBuildPhase",
           groupName,
           widgetTargetUuid,
           "app_extension",
           "",
-        )
-      }
-      else {
-        console.warn('No asset files detected')
+        );
+      } else {
+        Logging.logger.debug('No asset or GoogleService-Info.plist files detected');
       }
     }
     else {
