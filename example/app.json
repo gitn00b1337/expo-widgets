@@ -17,7 +17,10 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "expo.modules.widgets.example"
+      "bundleIdentifier": "expo.modules.widgets.example",
+      "config": {
+        "googleMapsApiKey": "I just need to be truthy"
+      }
     },
     "android": {
       "adaptiveIcon": {
