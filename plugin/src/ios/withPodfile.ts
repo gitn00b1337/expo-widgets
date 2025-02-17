@@ -15,7 +15,7 @@ export const withPodfile = (config: ExportedConfigWithProps<XcodeProject>, optio
   let podFileContent = fs.readFileSync(podFilePath).toString();
 
   const podInstaller = `
-\ntarget '${targetName}' do
+target '${targetName}' do
   use_expo_modules!
   config = use_native_modules!
 
@@ -59,8 +59,10 @@ end
 
   Logging.logger.debug('Updating podfile')
 
-  fs.writeFileSync(podFilePath, withAppExtFixPt2.contents);
-  fs.appendFileSync(podFilePath, podInstaller);
+  fs.writeFileSync(podFilePath, [
+    withAppExtFixPt2.contents,
+    podInstaller
+  ].join('\n'));
 
   return config;
 }
