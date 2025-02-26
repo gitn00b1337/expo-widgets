@@ -15,7 +15,7 @@ export const withPodfile = (config: ExportedConfigWithProps<XcodeProject>, optio
   let podFileContent = fs.readFileSync(podFilePath).toString();
 
   const podInstaller = `
-  target '${targetName}' do
+target '${targetName}' do
   use_expo_modules!
   config = use_native_modules!
 
@@ -30,7 +30,7 @@ export const withPodfile = (config: ExportedConfigWithProps<XcodeProject>, optio
     :privacy_file_aggregation_enabled => podfile_properties['apple.privacyManifestAggregationEnabled'] != 'false',
   )
 end
-      `;
+`;
 
   const withAppExtFix = mergeContents({
     tag: "app_ext_fix",
@@ -57,18 +57,12 @@ end
     comment: "#",
   })
 
-  const withPodInstall = mergeContents({
-    tag: 'expo-widgets',
-    src: withAppExtFixPt2.contents,
-    newSrc: podInstaller,
-    anchor: /target /,
-    offset: 0,
-    comment: "#",
-  })
-
   Logging.logger.debug('Updating podfile')
 
-  fs.writeFileSync(podFilePath, withPodInstall.contents);
+  fs.writeFileSync(podFilePath, [
+    withAppExtFixPt2.contents,
+    podInstaller
+  ].join('\n'));
 
   return config;
 }
